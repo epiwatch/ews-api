@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.13 (Ubuntu 12.13-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.13 (Ubuntu 12.13-0ubuntu0.20.04.1)
+-- Dumped from database version 12.17 (Ubuntu 12.17-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.17 (Ubuntu 12.17-0ubuntu0.20.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -30,6 +30,8 @@ CREATE TABLE public.colours_api (
 );
 
 
+
+
 --
 -- Name: country_data; Type: TABLE; Schema: public; Owner: -
 --
@@ -41,8 +43,11 @@ CREATE TABLE public.country_data (
     iso2 character varying(2),
     latitude double precision NOT NULL,
     longitude double precision NOT NULL,
-    last_updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    last_updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    hindi_translation character varying(255)
 );
+
+
 
 
 --
@@ -53,8 +58,12 @@ CREATE TABLE public.disease (
     id integer NOT NULL,
     disease character varying(100) NOT NULL,
     active smallint NOT NULL,
-    last_updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    last_updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    hindi_translation character varying(255),
+    colour character varying(32)
 );
+
+
 
 
 --
@@ -92,6 +101,7 @@ CREATE TABLE public.report_data_field (
 );
 
 
+
 --
 -- Name: report_data_field_type; Type: TABLE; Schema: public; Owner: -
 --
@@ -104,6 +114,7 @@ CREATE TABLE public.report_data_field_type (
 );
 
 
+
 --
 -- Name: report_data_point; Type: TABLE; Schema: public; Owner: -
 --
@@ -114,6 +125,7 @@ CREATE TABLE public.report_data_point (
     report_data_field_id integer,
     value character varying NOT NULL
 );
+
 
 
 --
@@ -145,6 +157,7 @@ CREATE TABLE public.report_data_point_location (
 );
 
 
+
 --
 -- Name: report_data_point_syndrome; Type: TABLE; Schema: public; Owner: -
 --
@@ -163,8 +176,10 @@ CREATE TABLE public.report_data_point_syndrome (
 CREATE TABLE public.subregions (
     id integer NOT NULL,
     subregion character varying(50),
-    iso3 character varying(3)
+    iso3 character varying(3),
+    hindi_translation character varying(128) DEFAULT NULL::character varying
 );
+
 
 
 --
@@ -175,8 +190,12 @@ CREATE TABLE public.syndrome (
     id bigint NOT NULL,
     syndrome character varying(100) NOT NULL,
     active smallint NOT NULL,
-    last_updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    last_updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    hindi_translation character varying(255),
+    colour character varying(16)
 );
+
+
 
 
 --
@@ -691,241 +710,241 @@ COPY public.colours_api (id, color_hex) FROM stdin;
 -- Data for Name: country_data; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.country_data (id, country_name, iso3, iso2, latitude, longitude, last_updated) FROM stdin;
-1	Aruba	ABW	AW	12.5167	-70.0167	2023-08-14 08:43:59
-2	Afghanistan	AFG	AF	34.5228	69.1761	2023-08-14 08:43:59
-3	Angola	AGO	AO	-8.81155	13.242	2023-08-14 08:43:59
-4	Albania	ALB	AL	41.3317	19.8172	2023-08-14 08:43:59
-5	Andorra	AND	AD	42.5075	1.5218	2023-08-14 08:43:59
-6	United Arab Emirates	ARE	AE	24.4764	54.3705	2023-08-14 08:43:59
-7	Argentina	ARG	AR	-34.6118	-58.4173	2023-08-14 08:43:59
-8	Armenia	ARM	AM	40.1596	44.509	2023-08-14 08:43:59
-9	American Samoa	ASM	AS	-14.2846	-170.691	2023-08-14 08:43:59
-10	Antigua and Barbuda	ATG	AG	17.1175	-61.8456	2023-08-14 08:43:59
-11	Australia	AUS	AU	-35.282	149.129	2023-08-14 08:43:59
-12	Austria	AUT	AT	48.2201	16.3798	2023-08-14 08:43:59
-13	Azerbaijan	AZE	AZ	40.3834	49.8932	2023-08-14 08:43:59
-14	Burundi	BDI	BI	-3.3784	29.3639	2023-08-14 08:43:59
-15	Belgium	BEL	BE	50.8371	4.36761	2023-08-14 08:43:59
-16	Benin	BEN	BJ	6.4779	2.6323	2023-08-14 08:43:59
-17	Burkina Faso	BFA	BF	12.3605	-1.53395	2023-08-14 08:43:59
-18	Bangladesh	BGD	BD	23.7055	90.4113	2023-08-14 08:43:59
-19	Bulgaria	BGR	BG	42.7105	23.3238	2023-08-14 08:43:59
-20	Bahrain	BHR	BH	26.1921	50.5354	2023-08-14 08:43:59
-21	Bahamas, The	BHS	BS	25.0661	-77.339	2023-08-14 08:43:59
-22	Bosnia and Herzegovina	BIH	BA	43.8607	18.4214	2023-08-14 08:43:59
-23	Belarus	BLR	BY	53.9678	27.5766	2023-08-14 08:43:59
-24	Belize	BLZ	BZ	17.2534	-88.7713	2023-08-14 08:43:59
-25	Bermuda	BMU	BM	32.3293	-64.706	2023-08-14 08:43:59
-26	Bolivia	BOL	BO	-13.9908	-66.1936	2023-08-14 08:43:59
-27	Brazil	BRA	BR	-15.7801	-47.9292	2023-08-14 08:43:59
-28	Barbados	BRB	BB	13.0935	-59.6105	2023-08-14 08:43:59
-29	Brunei Darussalam	BRN	BN	4.94199	114.946	2023-08-14 08:43:59
-30	Bhutan	BTN	BT	27.5768	89.6177	2023-08-14 08:43:59
-31	Botswana	BWA	BW	-24.6544	25.9201	2023-08-14 08:43:59
-32	Central African Republic	CAF	CF	5.63056	21.6407	2023-08-14 08:43:59
-33	Canada	CAN	CA	45.4215	-75.6919	2023-08-14 08:43:59
-34	Switzerland	CHE	CH	46.948	7.44821	2023-08-14 08:43:59
-35	Chile	CHL	CL	-33.475	-70.6475	2023-08-14 08:43:59
-36	China	CHN	CN	40.0495	116.286	2023-08-14 08:43:59
-37	Cote d'Ivoire	CIV	CI	5.332	-4.0305	2023-08-14 08:43:59
-38	Cameroon	CMR	CM	3.8721	11.5174	2023-08-14 08:43:59
-39	Congo, Dem. Rep.	COD	CD	-4.325	15.3222	2023-08-14 08:43:59
-40	Congo, Rep.	COG	CG	-4.2767	15.2662	2023-08-14 08:43:59
-41	Colombia	COL	CO	4.60987	-74.082	2023-08-14 08:43:59
-42	Comoros	COM	KM	-11.6986	43.2418	2023-08-14 08:43:59
-43	Cabo Verde	CPV	CV	14.9218	-23.5087	2023-08-14 08:43:59
-44	Costa Rica	CRI	CR	9.63701	-84.0089	2023-08-14 08:43:59
-45	Cuba	CUB	CU	23.1333	-82.3667	2023-08-14 08:43:59
-46	Cayman Islands	CYM	KY	19.3022	-81.3857	2023-08-14 08:43:59
-47	Cyprus	CYP	CY	35.1676	33.3736	2023-08-14 08:43:59
-48	Czech Republic	CZE	CZ	50.0878	14.4205	2023-08-14 08:43:59
-49	Germany	DEU	DE	52.5235	13.4115	2023-08-14 08:43:59
-50	Djibouti	DJI	DJ	11.5806	43.1425	2023-08-14 08:43:59
-51	Dominica	DMA	DM	15.2976	-61.39	2023-08-14 08:43:59
-52	Denmark	DNK	DK	55.6763	12.5681	2023-08-14 08:43:59
-53	Dominican Republic	DOM	DO	18.479	-69.8908	2023-08-14 08:43:59
-54	Algeria	DZA	DZ	36.7397	3.05097	2023-08-14 08:43:59
-55	Ecuador	ECU	EC	-0.229498	-78.5243	2023-08-14 08:43:59
-56	Egypt, Arab Rep.	EGY	EG	30.0982	31.2461	2023-08-14 08:43:59
-57	Eritrea	ERI	ER	15.3315	38.9183	2023-08-14 08:43:59
-58	Spain	ESP	ES	40.4167	-3.70327	2023-08-14 08:43:59
-59	Estonia	EST	EE	59.4392	24.7586	2023-08-14 08:43:59
-60	Ethiopia	ETH	ET	9.02274	38.7468	2023-08-14 08:43:59
-61	Finland	FIN	FI	60.1608	24.9525	2023-08-14 08:43:59
-62	Fiji	FJI	FJ	-18.1149	178.399	2023-08-14 08:43:59
-63	France	FRA	FR	48.8566	2.35097	2023-08-14 08:43:59
-64	Faroe Islands	FRO	FO	61.8926	-6.91181	2023-08-14 08:43:59
-65	Micronesia, Fed. Sts.	FSM	FM	6.91771	158.185	2023-08-14 08:43:59
-66	Gabon	GAB	GA	0.38832	9.45162	2023-08-14 08:43:59
-67	United Kingdom	GBR	GB	51.5002	-0.126236	2023-08-14 08:43:59
-68	Georgia	GEO	GE	41.71	44.793	2023-08-14 08:43:59
-69	Ghana	GHA	GH	5.57045	-0.20795	2023-08-14 08:43:59
-70	Guinea	GIN	GN	9.51667	-13.7	2023-08-14 08:43:59
-71	Gambia, The	GMB	GM	13.4495	-16.5885	2023-08-14 08:43:59
-72	Guinea-Bissau	GNB	GW	11.8037	-15.1804	2023-08-14 08:43:59
-73	Equatorial Guinea	GNQ	GQ	3.7523	8.7741	2023-08-14 08:43:59
-74	Greece	GRC	GR	37.9792	23.7166	2023-08-14 08:43:59
-75	Grenada	GRD	GD	12.0653	-61.7449	2023-08-14 08:43:59
-76	Greenland	GRL	GL	64.1836	-51.7214	2023-08-14 08:43:59
-77	Guatemala	GTM	GT	14.6248	-90.5328	2023-08-14 08:43:59
-78	Guam	GUM	GU	13.4443	144.794	2023-08-14 08:43:59
-79	Guyana	GUY	GY	6.80461	-58.1548	2023-08-14 08:43:59
-80	Hong Kong SAR, China	HKG	HK	22.3964	114.109	2023-08-14 08:43:59
-81	Honduras	HND	HN	15.1333	-87.4667	2023-08-14 08:43:59
-82	Croatia	HRV	HR	45.8069	15.9614	2023-08-14 08:43:59
-83	Haiti	HTI	HT	18.5392	-72.3288	2023-08-14 08:43:59
-84	Hungary	HUN	HU	47.4984	19.0408	2023-08-14 08:43:59
-85	Indonesia	IDN	ID	-6.19752	106.83	2023-08-14 08:43:59
-86	Isle of Man	IMN	IM	54.1509	-4.47928	2023-08-14 08:43:59
-87	India	IND	IN	28.6353	77.225	2023-08-14 08:43:59
-88	Ireland	IRL	IE	53.3441	-6.26749	2023-08-14 08:43:59
-89	Iran, Islamic Rep.	IRN	IR	35.6878	51.4447	2023-08-14 08:43:59
-90	Iraq	IRQ	IQ	33.3302	44.394	2023-08-14 08:43:59
-91	Iceland	ISL	IS	64.1353	-21.8952	2023-08-14 08:43:59
-92	Israel	ISR	IL	31.7717	35.2035	2023-08-14 08:43:59
-93	Italy	ITA	IT	41.8955	12.4823	2023-08-14 08:43:59
-94	Jamaica	JAM	JM	17.9927	-76.792	2023-08-14 08:43:59
-95	Jordan	JOR	JO	31.9497	35.9263	2023-08-14 08:43:59
-96	Japan	JPN	JP	35.67	139.77	2023-08-14 08:43:59
-97	Kazakhstan	KAZ	KZ	51.1879	71.4382	2023-08-14 08:43:59
-98	Kenya	KEN	KE	-1.27975	36.8126	2023-08-14 08:43:59
-99	Kyrgyz Republic	KGZ	KG	42.8851	74.6057	2023-08-14 08:43:59
-100	Cambodia	KHM	KH	11.5556	104.874	2023-08-14 08:43:59
-101	Kiribati	KIR	KI	1.32905	172.979	2023-08-14 08:43:59
-102	St. Kitts and Nevis	KNA	KN	17.3	-62.7309	2023-08-14 08:43:59
-103	Korea, Rep.	KOR	KR	37.5323	126.957	2023-08-14 08:43:59
-104	Kuwait	KWT	KW	29.3721	47.9824	2023-08-14 08:43:59
-105	Lao PDR	LAO	LA	18.5826	102.177	2023-08-14 08:43:59
-106	Lebanon	LBN	LB	33.8872	35.5134	2023-08-14 08:43:59
-107	Liberia	LBR	LR	6.30039	-10.7957	2023-08-14 08:43:59
-108	Libya	LBY	LY	32.8578	13.1072	2023-08-14 08:43:59
-109	St. Lucia	LCA	LC	14	-60.9832	2023-08-14 08:43:59
-110	Liechtenstein	LIE	LI	47.1411	9.52148	2023-08-14 08:43:59
-111	Sri Lanka	LKA	LK	6.92148	79.8528	2023-08-14 08:43:59
-112	Lesotho	LSO	LS	-29.5208	27.7167	2023-08-14 08:43:59
-113	Lithuania	LTU	LT	54.6896	25.2799	2023-08-14 08:43:59
-114	Luxembourg	LUX	LU	49.61	6.1296	2023-08-14 08:43:59
-115	Latvia	LVA	LV	56.9465	24.1048	2023-08-14 08:43:59
-116	Macao SAR, China	MAC	MO	22.1667	113.55	2023-08-14 08:43:59
-117	Morocco	MAR	MA	33.9905	-6.8704	2023-08-14 08:43:59
-118	Monaco	MCO	MC	43.7325	7.41891	2023-08-14 08:43:59
-119	Moldova	MDA	MD	47.0167	28.8497	2023-08-14 08:43:59
-120	Madagascar	MDG	MG	-20.4667	45.7167	2023-08-14 08:43:59
-121	Maldives	MDV	MV	4.1742	73.5109	2023-08-14 08:43:59
-122	Mexico	MEX	MX	19.427	-99.1276	2023-08-14 08:43:59
-123	Marshall Islands	MHL	MH	7.11046	171.135	2023-08-14 08:43:59
-124	North Macedonia	MKD	MK	42.0024	21.4361	2023-08-14 08:43:59
-125	Mali	MLI	ML	13.5667	-7.50034	2023-08-14 08:43:59
-126	Malta	MLT	MT	35.9042	14.5189	2023-08-14 08:43:59
-127	Myanmar	MMR	MM	21.914	95.9562	2023-08-14 08:43:59
-128	Montenegro	MNE	ME	42.4602	19.2595	2023-08-14 08:43:59
-129	Mongolia	MNG	MN	47.9129	106.937	2023-08-14 08:43:59
-130	Northern Mariana Islands	MNP	MP	15.1935	145.765	2023-08-14 08:43:59
-131	Mozambique	MOZ	MZ	-25.9664	32.5713	2023-08-14 08:43:59
-132	Mauritania	MRT	MR	18.2367	-15.9824	2023-08-14 08:43:59
-133	Mauritius	MUS	MU	-20.1605	57.4977	2023-08-14 08:43:59
-134	Malawi	MWI	MW	-13.9899	33.7703	2023-08-14 08:43:59
-135	Malaysia	MYS	MY	3.12433	101.684	2023-08-14 08:43:59
-136	Namibia	NAM	NA	-22.5648	17.0931	2023-08-14 08:43:59
-137	New Caledonia	NCL	NC	-22.2677	166.464	2023-08-14 08:43:59
-138	Niger	NER	NE	13.514	2.1073	2023-08-14 08:43:59
-139	Nigeria	NGA	NG	9.05804	7.48906	2023-08-14 08:43:59
-140	Nicaragua	NIC	NI	12.1475	-86.2734	2023-08-14 08:43:59
-141	Netherlands	NLD	NL	52.3738	4.89095	2023-08-14 08:43:59
-142	Norway	NOR	NO	59.9138	10.7387	2023-08-14 08:43:59
-143	Nepal	NPL	NP	27.6939	85.3157	2023-08-14 08:43:59
-144	Nauru	NRU	NR	-0.5477	166.920867	2023-08-14 08:43:59
-145	New Zealand	NZL	NZ	-41.2865	174.776	2023-08-14 08:43:59
-146	Oman	OMN	OM	23.6105	58.5874	2023-08-14 08:43:59
-147	Pakistan	PAK	PK	30.5167	72.8	2023-08-14 08:43:59
-148	Panama	PAN	PA	8.99427	-79.5188	2023-08-14 08:43:59
-149	Peru	PER	PE	-12.0931	-77.0465	2023-08-14 08:43:59
-150	Philippines	PHL	PH	14.5515	121.035	2023-08-14 08:43:59
-151	Palau	PLW	PW	7.34194	134.479	2023-08-14 08:43:59
-152	Papua New Guinea	PNG	PG	-9.47357	147.194	2023-08-14 08:43:59
-153	Poland	POL	PL	52.26	21.02	2023-08-14 08:43:59
-154	Puerto Rico	PRI	PR	18.23	-66	2023-08-14 08:43:59
-155	Korea, Dem. People’s Rep.	PRK	KP	39.0319	125.754	2023-08-14 08:43:59
-156	Portugal	PRT	PT	38.7072	-9.13552	2023-08-14 08:43:59
-157	Paraguay	PRY	PY	-25.3005	-57.6362	2023-08-14 08:43:59
-158	French Polynesia	PYF	PF	-17.535	-149.57	2023-08-14 08:43:59
-159	Qatar	QAT	QA	25.2948	51.5082	2023-08-14 08:43:59
-160	Romania	ROU	RO	44.4479	26.0979	2023-08-14 08:43:59
-161	Russian Federation	RUS	RU	55.7558	37.6176	2023-08-14 08:43:59
-162	Rwanda	RWA	RW	-1.95325	30.0587	2023-08-14 08:43:59
-163	Saudi Arabia	SAU	SA	24.6748	46.6977	2023-08-14 08:43:59
-164	Sudan	SDN	SD	15.5932	32.5363	2023-08-14 08:43:59
-165	Senegal	SEN	SN	14.7247	-17.4734	2023-08-14 08:43:59
-166	Singapore	SGP	SG	1.28941	103.85	2023-08-14 08:43:59
-167	Solomon Islands	SLB	SB	-9.42676	159.949	2023-08-14 08:43:59
-168	Sierra Leone	SLE	SL	8.4821	-13.2134	2023-08-14 08:43:59
-169	El Salvador	SLV	SV	13.7034	-89.2073	2023-08-14 08:43:59
-170	San Marino	SMR	SM	43.9322	12.4486	2023-08-14 08:43:59
-171	Somalia	SOM	SO	2.07515	45.3254	2023-08-14 08:43:59
-172	Serbia	SRB	RS	44.8024	20.4656	2023-08-14 08:43:59
-173	South Sudan	SSD	SS	4.85	31.6	2023-08-14 08:43:59
-174	Sao Tome and Principe	STP	ST	0.20618	6.6071	2023-08-14 08:43:59
-175	Suriname	SUR	SR	5.8232	-55.1679	2023-08-14 08:43:59
-176	Slovak Republic	SVK	SK	48.1484	17.1073	2023-08-14 08:43:59
-177	Slovenia	SVN	SI	46.0546	14.5044	2023-08-14 08:43:59
-178	Sweden	SWE	SE	59.3327	18.0645	2023-08-14 08:43:59
-179	Eswatini	SWZ	SZ	-26.5225	31.4659	2023-08-14 08:43:59
-180	Seychelles	SYC	SC	-4.6309	55.4466	2023-08-14 08:43:59
-181	Syrian Arab Republic	SYR	SY	33.5146	36.3119	2023-08-14 08:43:59
-182	Turks and Caicos Islands	TCA	TC	21.4602778	-71.141389	2023-08-14 08:43:59
-183	Chad	TCD	TD	12.1048	15.0445	2023-08-14 08:43:59
-184	Togo	TGO	TG	6.1228	1.2255	2023-08-14 08:43:59
-185	Thailand	THA	TH	13.7308	100.521	2023-08-14 08:43:59
-186	Tajikistan	TJK	TJ	38.5878	68.7864	2023-08-14 08:43:59
-187	Turkmenistan	TKM	TM	37.9509	58.3794	2023-08-14 08:43:59
-188	Timor-Leste	TLS	TL	-8.56667	125.567	2023-08-14 08:43:59
-189	Tonga	TON	TO	-21.136	-175.216	2023-08-14 08:43:59
-190	Trinidad and Tobago	TTO	TT	10.6596	-61.4789	2023-08-14 08:43:59
-191	Tunisia	TUN	TN	36.7899	10.21	2023-08-14 08:43:59
-192	Turkey	TUR	TR	39.7153	32.3606	2023-08-14 08:43:59
-193	Tuvalu	TUV	TV	-8.6314877	179.089567	2023-08-14 08:43:59
-194	Tanzania	TZA	TZ	-6.17486	35.7382	2023-08-14 08:43:59
-195	Uganda	UGA	UG	0.314269	32.5729	2023-08-14 08:43:59
-196	Ukraine	UKR	UA	50.4536	30.5038	2023-08-14 08:43:59
-197	Uruguay	URY	UY	-34.8941	-56.0675	2023-08-14 08:43:59
-198	United States	USA	US	38.8895	-77.032	2023-08-14 08:43:59
-199	Uzbekistan	UZB	UZ	41.3052	69.269	2023-08-14 08:43:59
-200	St. Vincent and the Grenadines	VCT	VC	13.2035	-61.2653	2023-08-14 08:43:59
-201	Venezuela, RB	VEN	VE	9.08165	-69.8371	2023-08-14 08:43:59
-202	British Virgin Islands	VGB	VG	18.431389	-64.623056	2023-08-14 08:43:59
-203	Virgin Islands (U.S.)	VIR	VI	18.3358	-64.8963	2023-08-14 08:43:59
-204	Vietnam	VNM	VN	21.0069	105.825	2023-08-14 08:43:59
-205	Vanuatu	VUT	VU	-17.7404	168.321	2023-08-14 08:43:59
-206	Samoa	WSM	WS	-13.8314	-171.752	2023-08-14 08:43:59
-207	Kosovo	XKX	XK	42.565	20.926	2023-08-14 08:43:59
-208	Yemen, Rep.	YEM	YE	15.352	44.2075	2023-08-14 08:43:59
-209	South Africa	ZAF	ZA	-25.746	28.1871	2023-08-14 08:43:59
-210	Zambia	ZMB	ZM	-15.3982	28.2937	2023-08-14 08:43:59
-211	Zimbabwe	ZWE	ZW	-17.8312	31.0672	2023-08-14 08:43:59
-212	Reunion	REU	RE	-21.1306889	55.5264794	2023-08-14 08:43:59
-213	French Guyana	GUF	GF	3.9332383	-53.0875742	2023-08-14 08:43:59
-214	Taiwan	TWN	TW	23.553118	121.0211024	2023-08-14 08:43:59
-215	Vatican City	VAT	VA	41.9038795	12.4520834	2023-08-14 08:43:59
-216	Christmas Island	CXR	CX	-10.4912311	105.6229817	2023-08-14 08:43:59
-217	Cocos (Keeling) Islands	CCK	CC	-12.1708739	96.8417393	2023-08-14 08:43:59
-218	Guadeloupe	GLP	GP	16.1730949	-61.4054001	2023-08-14 08:43:59
-219	Martinique	MTQ	MQ	14.6336817	-61.0198104	2023-08-14 08:43:59
-220	Mayotte	MYT	YT	-12.8210325	45.1590997	2023-08-14 08:43:59
-221	Norfolk Island	NFK	NF	-29.0328267	167.9543925	2023-08-14 08:43:59
-222	Saint Helena	SHN	SH	-15.9655282	-5.7114846	2023-08-14 08:43:59
-223	St. Barthelemy	BLM	BL	17.9139222	-62.8338521	2023-08-14 08:43:59
-224	World	WWW	\N	34.476624	-40.896274	2023-08-14 08:43:59
-225	Asia	ABB	\N	34.047863	100.619652	2023-08-14 08:43:59
-226	Europe	EEE	\N	54.525963	15.255119	2023-08-14 08:43:59
-227	Africa	FFF	\N	-8.783195	34.508522	2023-08-14 08:43:59
-228	North America	NNN	\N	48.922499	-101.733095	2023-08-14 08:43:59
-229	South America	SRR	\N	-10.487812	-60.221021	2023-08-14 08:43:59
-230	Oceania	UUU	\N	-29.630426	155.722393	2023-08-14 08:43:59
-231	Palestine	PSE	PS	31.947351	35.227163	2023-08-14 08:43:59
-232	Guernsey	GGY	GG	49.4630653	-2.5881123	2023-08-14 08:43:59
-233	Antarctica	ATA	AQ	-69.6354154	0	2023-08-14 08:43:59
-234	Arctic	ARC	\N	66.5666644	0	2023-08-14 08:43:59
+COPY public.country_data (id, country_name, iso3, iso2, latitude, longitude, last_updated, hindi_translation) FROM stdin;
+1	Aruba	ABW	AW	12.5167	-70.0167	2023-08-14 08:43:59	अरूबा
+2	Afghanistan	AFG	AF	34.5228	69.1761	2023-08-14 08:43:59	अफ़ग़ानिस्तान‌
+3	Angola	AGO	AO	-8.81155	13.242	2023-08-14 08:43:59	अंगोला
+4	Albania	ALB	AL	41.3317	19.8172	2023-08-14 08:43:59	अल्बानिया
+5	Andorra	AND	AD	42.5075	1.5218	2023-08-14 08:43:59	अंडोरा
+6	United Arab Emirates	ARE	AE	24.4764	54.3705	2023-08-14 08:43:59	संयुक्त‌ अर‌ब‌ अमीरात‌
+7	Argentina	ARG	AR	-34.6118	-58.4173	2023-08-14 08:43:59	आर्जेंटीना
+8	Armenia	ARM	AM	40.1596	44.509	2023-08-14 08:43:59	आर्मीनिया
+9	American Samoa	ASM	AS	-14.2846	-170.691	2023-08-14 08:43:59	अमरीकी स‌मोआ
+10	Antigua and Barbuda	ATG	AG	17.1175	-61.8456	2023-08-14 08:43:59	अंटिग्वा और‌ बार‌बुडा
+11	Australia	AUS	AU	-35.282	149.129	2023-08-14 08:43:59	ऑस्ट्रेलिया
+12	Austria	AUT	AT	48.2201	16.3798	2023-08-14 08:43:59	ऑस्ट्रिया
+13	Azerbaijan	AZE	AZ	40.3834	49.8932	2023-08-14 08:43:59	आज़र‌बायजान‌
+14	Burundi	BDI	BI	-3.3784	29.3639	2023-08-14 08:43:59	बुरुंडी
+15	Belgium	BEL	BE	50.8371	4.36761	2023-08-14 08:43:59	बेल्जिय‌म‌
+16	Benin	BEN	BJ	6.4779	2.6323	2023-08-14 08:43:59	बेनिन‌
+17	Burkina Faso	BFA	BF	12.3605	-1.53395	2023-08-14 08:43:59	बुर्कीना फ़ासो
+18	Bangladesh	BGD	BD	23.7055	90.4113	2023-08-14 08:43:59	बांग्लादेश
+19	Bulgaria	BGR	BG	42.7105	23.3238	2023-08-14 08:43:59	बल्गारिया
+20	Bahrain	BHR	BH	26.1921	50.5354	2023-08-14 08:43:59	बाहरैन
+21	Bahamas, The	BHS	BS	25.0661	-77.339	2023-08-14 08:43:59	ब‌हामाज़
+22	Bosnia and Herzegovina	BIH	BA	43.8607	18.4214	2023-08-14 08:43:59	बोस‌निया और‌ ह‌र्ज़ेगोविना
+23	Belarus	BLR	BY	53.9678	27.5766	2023-08-14 08:43:59	बेलारूस‌
+24	Belize	BLZ	BZ	17.2534	-88.7713	2023-08-14 08:43:59	बेलीज़
+25	Bermuda	BMU	BM	32.3293	-64.706	2023-08-14 08:43:59	ब‌र‌मुडा
+26	Bolivia	BOL	BO	-13.9908	-66.1936	2023-08-14 08:43:59	बोलिविया
+27	Brazil	BRA	BR	-15.7801	-47.9292	2023-08-14 08:43:59	ब्राज़ील
+28	Barbados	BRB	BB	13.0935	-59.6105	2023-08-14 08:43:59	बारबेडॉस
+29	Brunei Darussalam	BRN	BN	4.94199	114.946	2023-08-14 08:43:59	ब्रूनई दारुस्सलाम‌
+30	Bhutan	BTN	BT	27.5768	89.6177	2023-08-14 08:43:59	भूटान‌
+31	Botswana	BWA	BW	-24.6544	25.9201	2023-08-14 08:43:59	बोत्स्वाना
+32	Central African Republic	CAF	CF	5.63056	21.6407	2023-08-14 08:43:59	मध्य अफ़्रीकी गणराज्य
+33	Canada	CAN	CA	45.4215	-75.6919	2023-08-14 08:43:59	कैनेडा
+34	Switzerland	CHE	CH	46.948	7.44821	2023-08-14 08:43:59	स्विट्ज़र‌लैंड‌
+35	Chile	CHL	CL	-33.475	-70.6475	2023-08-14 08:43:59	चिली
+36	China	CHN	CN	40.0495	116.286	2023-08-14 08:43:59	चीन‌
+37	Cote d'Ivoire	CIV	CI	5.332	-4.0305	2023-08-14 08:43:59	कोत द’ईवोआर
+38	Cameroon	CMR	CM	3.8721	11.5174	2023-08-14 08:43:59	कैम‌रून‌
+39	Congo, Dem. Rep.	COD	CD	-4.325	15.3222	2023-08-14 08:43:59	कांगो, लोक‌तांत्रिक‌ ग‌ण‌राज्य‌
+40	Congo, Rep.	COG	CG	-4.2767	15.2662	2023-08-14 08:43:59	कांगो, ग‌ण‌राज्य
+41	Colombia	COL	CO	4.60987	-74.082	2023-08-14 08:43:59	कोलंबिया
+42	Comoros	COM	KM	-11.6986	43.2418	2023-08-14 08:43:59	कोमोरोस‌
+43	Cabo Verde	CPV	CV	14.9218	-23.5087	2023-08-14 08:43:59	केप वर्दे
+44	Costa Rica	CRI	CR	9.63701	-84.0089	2023-08-14 08:43:59	कोस्टारीका
+45	Cuba	CUB	CU	23.1333	-82.3667	2023-08-14 08:43:59	क्यूबा
+46	Cayman Islands	CYM	KY	19.3022	-81.3857	2023-08-14 08:43:59	केमैन‌ द्वीप‌
+47	Cyprus	CYP	CY	35.1676	33.3736	2023-08-14 08:43:59	साइप्रस‌
+48	Czech Republic	CZE	CZ	50.0878	14.4205	2023-08-14 08:43:59	चेक‌ ग‌ण‌राज्य‌
+49	Germany	DEU	DE	52.5235	13.4115	2023-08-14 08:43:59	ज‌र्म‌नी
+50	Djibouti	DJI	DJ	11.5806	43.1425	2023-08-14 08:43:59	जिबूती
+51	Dominica	DMA	DM	15.2976	-61.39	2023-08-14 08:43:59	डोमिनिका
+52	Denmark	DNK	DK	55.6763	12.5681	2023-08-14 08:43:59	डेन‌मार्क‌
+53	Dominican Republic	DOM	DO	18.479	-69.8908	2023-08-14 08:43:59	डोमिनिक‌न‌ ग‌ण‌राज्य‌
+54	Algeria	DZA	DZ	36.7397	3.05097	2023-08-14 08:43:59	अल्जीरिया
+55	Ecuador	ECU	EC	-0.229498	-78.5243	2023-08-14 08:43:59	इक्वादोर‌
+56	Egypt, Arab Rep.	EGY	EG	30.0982	31.2461	2023-08-14 08:43:59	ज़म्हूरियत मिस्र अल अरबिया
+57	Eritrea	ERI	ER	15.3315	38.9183	2023-08-14 08:43:59	एरिट्रिया
+58	Spain	ESP	ES	40.4167	-3.70327	2023-08-14 08:43:59	स्पेन‌
+59	Estonia	EST	EE	59.4392	24.7586	2023-08-14 08:43:59	एस्टोनिया
+60	Ethiopia	ETH	ET	9.02274	38.7468	2023-08-14 08:43:59	ईथियोपिया
+61	Finland	FIN	FI	60.1608	24.9525	2023-08-14 08:43:59	फ़िन‌लैंड‌
+62	Fiji	FJI	FJ	-18.1149	178.399	2023-08-14 08:43:59	फ़ीजी
+63	France	FRA	FR	48.8566	2.35097	2023-08-14 08:43:59	फ़्राँस
+64	Faroe Islands	FRO	FO	61.8926	-6.91181	2023-08-14 08:43:59	फ़ारोअ द्वीप‌
+65	Micronesia, Fed. Sts.	FSM	FM	6.91771	158.185	2023-08-14 08:43:59	संघीकृत राज्य माइक्रोनेशिया
+66	Gabon	GAB	GA	0.38832	9.45162	2023-08-14 08:43:59	गाबों
+67	United Kingdom	GBR	GB	51.5002	-0.126236	2023-08-14 08:43:59	ब्रिटेन‌
+68	Georgia	GEO	GE	41.71	44.793	2023-08-14 08:43:59	जॉर्जिया
+69	Ghana	GHA	GH	5.57045	-0.20795	2023-08-14 08:43:59	गाना
+70	Guinea	GIN	GN	9.51667	-13.7	2023-08-14 08:43:59	गिनी
+71	Gambia, The	GMB	GM	13.4495	-16.5885	2023-08-14 08:43:59	गाम्बिया
+144	Nauru	NRU	NR	-0.5477	166.920867	2023-08-14 08:43:59	नाउरू
+72	Guinea-Bissau	GNB	GW	11.8037	-15.1804	2023-08-14 08:43:59	गिनी बीसो
+73	Equatorial Guinea	GNQ	GQ	3.7523	8.7741	2023-08-14 08:43:59	इक्वटोरियल गिनी
+74	Greece	GRC	GR	37.9792	23.7166	2023-08-14 08:43:59	यूनान
+75	Grenada	GRD	GD	12.0653	-61.7449	2023-08-14 08:43:59	ग्रेनाडा
+76	Greenland	GRL	GL	64.1836	-51.7214	2023-08-14 08:43:59	ग्रीन‌लैंड‌
+77	Guatemala	GTM	GT	14.6248	-90.5328	2023-08-14 08:43:59	ग्वातेमाला
+78	Guam	GUM	GU	13.4443	144.794	2023-08-14 08:43:59	ग्वाम
+79	Guyana	GUY	GY	6.80461	-58.1548	2023-08-14 08:43:59	ग‌याना
+80	Hong Kong SAR, China	HKG	HK	22.3964	114.109	2023-08-14 08:43:59	हॉङ्कॉङ विशेष प्रशासनिक क्षेत्र चीन‌
+81	Honduras	HND	HN	15.1333	-87.4667	2023-08-14 08:43:59	होंदूरास‌
+82	Croatia	HRV	HR	45.8069	15.9614	2023-08-14 08:43:59	क्रोएशिया
+83	Haiti	HTI	HT	18.5392	-72.3288	2023-08-14 08:43:59	हाईती
+84	Hungary	HUN	HU	47.4984	19.0408	2023-08-14 08:43:59	हंग‌री
+85	Indonesia	IDN	ID	-6.19752	106.83	2023-08-14 08:43:59	इंडोनेशिया
+86	Isle of Man	IMN	IM	54.1509	-4.47928	2023-08-14 08:43:59	आइल ऑफ़ मैन
+87	India	IND	IN	28.6353	77.225	2023-08-14 08:43:59	भार‌त‌
+88	Ireland	IRL	IE	53.3441	-6.26749	2023-08-14 08:43:59	आय‌र‌लैंड‌
+89	Iran, Islamic Rep.	IRN	IR	35.6878	51.4447	2023-08-14 08:43:59	ईरान इस्लामी गणराज्य
+90	Iraq	IRQ	IQ	33.3302	44.394	2023-08-14 08:43:59	इराक‌
+91	Iceland	ISL	IS	64.1353	-21.8952	2023-08-14 08:43:59	आइस‌लैंड‌
+92	Israel	ISR	IL	31.7717	35.2035	2023-08-14 08:43:59	इस्राईल‌
+93	Italy	ITA	IT	41.8955	12.4823	2023-08-14 08:43:59	इट‌ली
+94	Jamaica	JAM	JM	17.9927	-76.792	2023-08-14 08:43:59	जमाइका
+95	Jordan	JOR	JO	31.9497	35.9263	2023-08-14 08:43:59	जोर्ड‌न‌
+96	Japan	JPN	JP	35.67	139.77	2023-08-14 08:43:59	जापान‌
+97	Kazakhstan	KAZ	KZ	51.1879	71.4382	2023-08-14 08:43:59	क‌ज़ाक‌स्तान‌
+98	Kenya	KEN	KE	-1.27975	36.8126	2023-08-14 08:43:59	कीनिया
+99	Kyrgyz Republic	KGZ	KG	42.8851	74.6057	2023-08-14 08:43:59	का हिंदी में मतलब
+100	Cambodia	KHM	KH	11.5556	104.874	2023-08-14 08:43:59	कंबोडिया
+101	Kiribati	KIR	KI	1.32905	172.979	2023-08-14 08:43:59	किरिबास
+102	St. Kitts and Nevis	KNA	KN	17.3	-62.7309	2023-08-14 08:43:59	सेंट किट्स एंड नेविस
+103	Korea, Rep.	KOR	KR	37.5323	126.957	2023-08-14 08:43:59	दक्षिण कोरिया
+104	Kuwait	KWT	KW	29.3721	47.9824	2023-08-14 08:43:59	कुवैत‌
+105	Lao PDR	LAO	LA	18.5826	102.177	2023-08-14 08:43:59	लाओ पीपुल्स डेमोक्रेटिक रिपब्लिक
+106	Lebanon	LBN	LB	33.8872	35.5134	2023-08-14 08:43:59	लेब‌नान‌
+107	Liberia	LBR	LR	6.30039	-10.7957	2023-08-14 08:43:59	लाइबीरिया
+108	Libya	LBY	LY	32.8578	13.1072	2023-08-14 08:43:59	लीबिया
+109	St. Lucia	LCA	LC	14	-60.9832	2023-08-14 08:43:59	सेण्ट लूसिया
+110	Liechtenstein	LIE	LI	47.1411	9.52148	2023-08-14 08:43:59	लीक्टेनस्टाइन
+111	Sri Lanka	LKA	LK	6.92148	79.8528	2023-08-14 08:43:59	श्रीलंका
+112	Lesotho	LSO	LS	-29.5208	27.7167	2023-08-14 08:43:59	लेसुटू
+113	Lithuania	LTU	LT	54.6896	25.2799	2023-08-14 08:43:59	लिथुआनिया
+114	Luxembourg	LUX	LU	49.61	6.1296	2023-08-14 08:43:59	ल‌ग्ज़मबर्ग‌
+115	Latvia	LVA	LV	56.9465	24.1048	2023-08-14 08:43:59	लातविया
+116	Macao SAR, China	MAC	MO	22.1667	113.55	2023-08-14 08:43:59	जनवादी गणराज्य चीन का मकाउ विशेष प्रशासनिक क्षेत्र
+117	Morocco	MAR	MA	33.9905	-6.8704	2023-08-14 08:43:59	मोर‌क्को
+118	Monaco	MCO	MC	43.7325	7.41891	2023-08-14 08:43:59	मोनाको
+119	Moldova	MDA	MD	47.0167	28.8497	2023-08-14 08:43:59	मोल‌डोवा
+120	Madagascar	MDG	MG	-20.4667	45.7167	2023-08-14 08:43:59	मैडागास्क‌र‌
+121	Maldives	MDV	MV	4.1742	73.5109	2023-08-14 08:43:59	माल‌दीव‌
+122	Mexico	MEX	MX	19.427	-99.1276	2023-08-14 08:43:59	मेक्सिको
+123	Marshall Islands	MHL	MH	7.11046	171.135	2023-08-14 08:43:59	मार्श‌ल‌ द्वीप‌
+124	North Macedonia	MKD	MK	42.0024	21.4361	2023-08-14 08:43:59	उत्तर मैसिडोनिया
+125	Mali	MLI	ML	13.5667	-7.50034	2023-08-14 08:43:59	माली
+126	Malta	MLT	MT	35.9042	14.5189	2023-08-14 08:43:59	माल्टा
+127	Myanmar	MMR	MM	21.914	95.9562	2023-08-14 08:43:59	म्यांमार‌
+128	Montenegro	MNE	ME	42.4602	19.2595	2023-08-14 08:43:59	मॉन्टेंगरो
+129	Mongolia	MNG	MN	47.9129	106.937	2023-08-14 08:43:59	मंगोलिया
+130	Northern Mariana Islands	MNP	MP	15.1935	145.765	2023-08-14 08:43:59	उत्त‌री मारिआना द्वीप‌
+131	Mozambique	MOZ	MZ	-25.9664	32.5713	2023-08-14 08:43:59	मोजा़म्बीक‌
+132	Mauritania	MRT	MR	18.2367	-15.9824	2023-08-14 08:43:59	मोरीतानिया
+133	Mauritius	MUS	MU	-20.1605	57.4977	2023-08-14 08:43:59	मोरिशिय‌स‌
+134	Malawi	MWI	MW	-13.9899	33.7703	2023-08-14 08:43:59	म‌लावी
+135	Malaysia	MYS	MY	3.12433	101.684	2023-08-14 08:43:59	मलेशिया
+136	Namibia	NAM	NA	-22.5648	17.0931	2023-08-14 08:43:59	नामीबिया
+137	New Caledonia	NCL	NC	-22.2677	166.464	2023-08-14 08:43:59	न्यू कैलडोनिया
+138	Niger	NER	NE	13.514	2.1073	2023-08-14 08:43:59	नीजेर
+139	Nigeria	NGA	NG	9.05804	7.48906	2023-08-14 08:43:59	नाइजीरिया
+140	Nicaragua	NIC	NI	12.1475	-86.2734	2023-08-14 08:43:59	नीकाराग्वा
+141	Netherlands	NLD	NL	52.3738	4.89095	2023-08-14 08:43:59	नेद‌र‌लैंड‌
+142	Norway	NOR	NO	59.9138	10.7387	2023-08-14 08:43:59	नॉर्वे
+143	Nepal	NPL	NP	27.6939	85.3157	2023-08-14 08:43:59	नेपाल‌
+145	New Zealand	NZL	NZ	-41.2865	174.776	2023-08-14 08:43:59	न्यूज़ीलैंड‌
+146	Oman	OMN	OM	23.6105	58.5874	2023-08-14 08:43:59	ओमान‌
+147	Pakistan	PAK	PK	30.5167	72.8	2023-08-14 08:43:59	पाकिस्तान‌
+148	Panama	PAN	PA	8.99427	-79.5188	2023-08-14 08:43:59	पानामा
+149	Peru	PER	PE	-12.0931	-77.0465	2023-08-14 08:43:59	पेरू
+150	Philippines	PHL	PH	14.5515	121.035	2023-08-14 08:43:59	फ़िलीपीन‌
+151	Palau	PLW	PW	7.34194	134.479	2023-08-14 08:43:59	पालाऊ
+152	Papua New Guinea	PNG	PG	-9.47357	147.194	2023-08-14 08:43:59	पापुआ न्यू गिनी
+153	Poland	POL	PL	52.26	21.02	2023-08-14 08:43:59	पोलैंड‌
+154	Puerto Rico	PRI	PR	18.23	-66	2023-08-14 08:43:59	प्वेर्तो रीको
+155	Korea, Dem. People’s Rep.	PRK	KP	39.0319	125.754	2023-08-14 08:43:59	कोरिया जनवादी लोकतान्त्रिक गणराज्य
+156	Portugal	PRT	PT	38.7072	-9.13552	2023-08-14 08:43:59	पुर्त‌गाल‌
+157	Paraguay	PRY	PY	-25.3005	-57.6362	2023-08-14 08:43:59	पाराग्वे
+158	French Polynesia	PYF	PF	-17.535	-149.57	2023-08-14 08:43:59	फ़्राँसीसी पॉलिनेशिया
+159	Qatar	QAT	QA	25.2948	51.5082	2023-08-14 08:43:59	क‌त‌र‌
+160	Romania	ROU	RO	44.4479	26.0979	2023-08-14 08:43:59	रुमानिया
+161	Russian Federation	RUS	RU	55.7558	37.6176	2023-08-14 08:43:59	रूसी संघ‌
+162	Rwanda	RWA	RW	-1.95325	30.0587	2023-08-14 08:43:59	रवांडा
+163	Saudi Arabia	SAU	SA	24.6748	46.6977	2023-08-14 08:43:59	स‌ऊदी अर‌ब‌
+164	Sudan	SDN	SD	15.5932	32.5363	2023-08-14 08:43:59	सुदान
+165	Senegal	SEN	SN	14.7247	-17.4734	2023-08-14 08:43:59	सेनेग‌ाल‌
+166	Singapore	SGP	SG	1.28941	103.85	2023-08-14 08:43:59	सिंगापुर‌
+167	Solomon Islands	SLB	SB	-9.42676	159.949	2023-08-14 08:43:59	सोलोम‌न‌ द्वीप‌
+168	Sierra Leone	SLE	SL	8.4821	-13.2134	2023-08-14 08:43:59	सियेरा लियोन‌
+169	El Salvador	SLV	SV	13.7034	-89.2073	2023-08-14 08:43:59	एल‌ साल्वादोर
+170	San Marino	SMR	SM	43.9322	12.4486	2023-08-14 08:43:59	सान‌ मारीनो
+171	Somalia	SOM	SO	2.07515	45.3254	2023-08-14 08:43:59	सोमालिया
+172	Serbia	SRB	RS	44.8024	20.4656	2023-08-14 08:43:59	सर्बिया
+173	South Sudan	SSD	SS	4.85	31.6	2023-08-14 08:43:59	दक्षिण सूडान
+174	Sao Tome and Principe	STP	ST	0.20618	6.6071	2023-08-14 08:43:59	सांव तोमे और‌ प्रीनसीप
+175	Suriname	SUR	SR	5.8232	-55.1679	2023-08-14 08:43:59	सूरीनाम‌
+176	Slovak Republic	SVK	SK	48.1484	17.1073	2023-08-14 08:43:59	स्लोवाक गणराज्य
+177	Slovenia	SVN	SI	46.0546	14.5044	2023-08-14 08:43:59	स्लोवेनिया
+178	Sweden	SWE	SE	59.3327	18.0645	2023-08-14 08:43:59	स्वीड‌न‌
+179	Eswatini	SWZ	SZ	-26.5225	31.4659	2023-08-14 08:43:59	एस्वातीनी
+180	Seychelles	SYC	SC	-4.6309	55.4466	2023-08-14 08:43:59	सेशेल्स‌
+181	Syrian Arab Republic	SYR	SY	33.5146	36.3119	2023-08-14 08:43:59	सीरियाई अर‌ब‌ ग‌ण‌राज्य‌
+182	Turks and Caicos Islands	TCA	TC	21.4602778	-71.141389	2023-08-14 08:43:59	तुर्क‌ और‌ केकोस‌ द्वीप‌
+183	Chad	TCD	TD	12.1048	15.0445	2023-08-14 08:43:59	चाड‌
+184	Togo	TGO	TG	6.1228	1.2255	2023-08-14 08:43:59	टोगो
+185	Thailand	THA	TH	13.7308	100.521	2023-08-14 08:43:59	थाईलैंड‌
+186	Tajikistan	TJK	TJ	38.5878	68.7864	2023-08-14 08:43:59	ताजीकिस्तान‌
+187	Turkmenistan	TKM	TM	37.9509	58.3794	2023-08-14 08:43:59	तुर्क‌मेनिस्तान‌
+188	Timor-Leste	TLS	TL	-8.56667	125.567	2023-08-14 08:43:59	तीमोर‌-लेस्त‌
+189	Tonga	TON	TO	-21.136	-175.216	2023-08-14 08:43:59	टोंगा
+190	Trinidad and Tobago	TTO	TT	10.6596	-61.4789	2023-08-14 08:43:59	ट्रिनिडाड‌ और‌ टोबोगो
+191	Tunisia	TUN	TN	36.7899	10.21	2023-08-14 08:43:59	ट्यूनीशिया
+192	Turkey	TUR	TR	39.7153	32.3606	2023-08-14 08:43:59	तुर्की
+193	Tuvalu	TUV	TV	-8.6314877	179.089567	2023-08-14 08:43:59	तुवालू
+194	Tanzania	TZA	TZ	-6.17486	35.7382	2023-08-14 08:43:59	तांज़ानिया, संयुक्त‌ ग‌ण‌राज्य‌
+195	Uganda	UGA	UG	0.314269	32.5729	2023-08-14 08:43:59	युगांडा
+196	Ukraine	UKR	UA	50.4536	30.5038	2023-08-14 08:43:59	यूक्रेन‌
+197	Uruguay	URY	UY	-34.8941	-56.0675	2023-08-14 08:43:59	उरुग्वाय
+198	United States	USA	US	38.8895	-77.032	2023-08-14 08:43:59	संयुक्त‌ राज्य‌ अम‌रीका
+199	Uzbekistan	UZB	UZ	41.3052	69.269	2023-08-14 08:43:59	उज़्बेकिस्तान‌
+200	St. Vincent and the Grenadines	VCT	VC	13.2035	-61.2653	2023-08-14 08:43:59	सेंट विंसेंट एवं ग्रेनाडींस
+201	Venezuela, RB	VEN	VE	9.08165	-69.8371	2023-08-14 08:43:59	वेनेजुएला के बोलीवियाई गणराज्य
+202	British Virgin Islands	VGB	VG	18.431389	-64.623056	2023-08-14 08:43:59	ब्रिटिश वर्जिन द्वीपसमूह
+203	Virgin Islands (U.S.)	VIR	VI	18.3358	-64.8963	2023-08-14 08:43:59	का हिन्दी अर्थ. प्रायोजित कड़ी 
+204	Vietnam	VNM	VN	21.0069	105.825	2023-08-14 08:43:59	विय‌त‌नाम‌
+205	Vanuatu	VUT	VU	-17.7404	168.321	2023-08-14 08:43:59	वानुआतु
+206	Samoa	WSM	WS	-13.8314	-171.752	2023-08-14 08:43:59	सैमोआ
+207	Kosovo	XKX	XK	42.565	20.926	2023-08-14 08:43:59	कोसोवो
+208	Yemen, Rep.	YEM	YE	15.352	44.2075	2023-08-14 08:43:59	यमन गणराज्य
+209	South Africa	ZAF	ZA	-25.746	28.1871	2023-08-14 08:43:59	द‌क्षिण‌ अफ़्रीका
+210	Zambia	ZMB	ZM	-15.3982	28.2937	2023-08-14 08:43:59	ज़ाम्बीया
+211	Zimbabwe	ZWE	ZW	-17.8312	31.0672	2023-08-14 08:43:59	ज़िम्बाब्व
+212	Reunion	REU	RE	-21.1306889	55.5264794	2023-08-14 08:43:59	रीयूनिय‌न‌
+213	French Guyana	GUF	GF	3.9332383	-53.0875742	2023-08-14 08:43:59	फ्रांसीसी गुयाना या फ़्रेंच गयाना
+214	Taiwan	TWN	TW	23.553118	121.0211024	2023-08-14 08:43:59	ताइवान चीनी गणराज्य
+215	Vatican City	VAT	VA	41.9038795	12.4520834	2023-08-14 08:43:59	वेटिकन शहर राज्य
+216	Christmas Island	CXR	CX	-10.4912311	105.6229817	2023-08-14 08:43:59	क्रिस‌म‌स‌ द्वीप‌
+217	Cocos (Keeling) Islands	CCK	CC	-12.1708739	96.8417393	2023-08-14 08:43:59	कोकोस (कीलिंग‌) द्वीप‌
+218	Guadeloupe	GLP	GP	16.1730949	-61.4054001	2023-08-14 08:43:59	ग्वादलूप‌
+219	Martinique	MTQ	MQ	14.6336817	-61.0198104	2023-08-14 08:43:59	मार्टीनीक‌
+220	Mayotte	MYT	YT	-12.8210325	45.1590997	2023-08-14 08:43:59	मायोत‌
+221	Norfolk Island	NFK	NF	-29.0328267	167.9543925	2023-08-14 08:43:59	नॉर‌फ़ोक‌ द्वीप‌
+222	Saint Helena	SHN	SH	-15.9655282	-5.7114846	2023-08-14 08:43:59	सेंट हेलेना
+223	St. Barthelemy	BLM	BL	17.9139222	-62.8338521	2023-08-14 08:43:59	सेंट बार्थेलेमी
+224	World	WWW	\N	34.476624	-40.896274	2023-08-14 08:43:59	दुनिया
+225	Asia	ABB	\N	34.047863	100.619652	2023-08-14 08:43:59	एशिया
+226	Europe	EEE	\N	54.525963	15.255119	2023-08-14 08:43:59	यूरोप
+227	Africa	FFF	\N	-8.783195	34.508522	2023-08-14 08:43:59	अफ़्रीका
+228	North America	NNN	\N	48.922499	-101.733095	2023-08-14 08:43:59	उत्तरी अमेरिका
+229	South America	SRR	\N	-10.487812	-60.221021	2023-08-14 08:43:59	दक्षिण अमेरिका
+230	Oceania	UUU	\N	-29.630426	155.722393	2023-08-14 08:43:59	ओशिनिया
+231	Palestine	PSE	PS	31.947351	35.227163	2023-08-14 08:43:59	फिलिस्तीन
+232	Guernsey	GGY	GG	49.4630653	-2.5881123	2023-08-14 08:43:59	ग्वेर्नसे
+233	Antarctica	ATA	AQ	-69.6354154	0	2023-08-14 08:43:59	अंटार्क‌टिका
+234	Arctic	ARC	\N	66.5666644	0	2023-08-14 08:43:59	आर्कटिक
 \.
 
 
@@ -933,203 +952,214 @@ COPY public.country_data (id, country_name, iso3, iso2, latitude, longitude, las
 -- Data for Name: disease; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.disease (id, disease, active, last_updated) FROM stdin;
-1	unknown	1	2023-08-14 08:43:59
-2	other	1	2023-08-14 08:43:59
-3	anthrax/cutaneous	1	2023-08-14 08:43:59
-4	anthrax/gastrointestinal	1	2023-08-14 08:43:59
-5	anthrax/inhalation	1	2023-08-14 08:43:59
-6	botulism	1	2023-08-14 08:43:59
-7	brucellosis	1	2023-08-14 08:43:59
-8	chikungunya	1	2023-08-14 08:43:59
-9	cholera	1	2023-08-14 08:43:59
-10	covid19	1	2023-08-14 08:43:59
-11	cryptococcosis	1	2023-08-14 08:43:59
-12	cryptosporidiosis	1	2023-08-14 08:43:59
-13	crimean-congo haemorrhagic fever	1	2023-08-14 08:43:59
-14	dengue	1	2023-08-14 08:43:59
-15	diphtheria	1	2023-08-14 08:43:59
-16	ebola haemorrhagic fever	1	2023-08-14 08:43:59
-17	ehec (e.coli)	1	2023-08-14 08:43:59
-18	enterovirus 71 infection	1	2023-08-14 08:43:59
-19	influenza a/h5n1	1	2023-08-14 08:43:59
-20	influenza a/h7n9	1	2023-08-14 08:43:59
-21	influenza a/h9n2	1	2023-08-14 08:43:59
-22	influenza a/h1n1	1	2023-08-14 08:43:59
-23	influenza a/h1n2	1	2023-08-14 08:43:59
-24	influenza a/h3n5	1	2023-08-14 08:43:59
-25	influenza a/h3n2	1	2023-08-14 08:43:59
-26	influenza a/h2n2	1	2023-08-14 08:43:59
-27	hand, foot and mouth disease	1	2023-08-14 08:43:59
-28	hantavirus	1	2023-08-14 08:43:59
-29	hepatitis a	1	2023-08-14 08:43:59
-30	hepatitis b	1	2023-08-14 08:43:59
-31	hepatitis c	1	2023-08-14 08:43:59
-32	hepatitis d	1	2023-08-14 08:43:59
-33	hepatitis e	1	2023-08-14 08:43:59
-34	histoplasmosis	1	2023-08-14 08:43:59
-35	hiv/aids	1	2023-08-14 08:43:59
-36	lassa fever	1	2023-08-14 08:43:59
-37	malaria	1	2023-08-14 08:43:59
-38	marburg virus disease	1	2023-08-14 08:43:59
-39	measles	1	2023-08-14 08:43:59
-40	MERS	1	2023-08-14 08:43:59
-41	mumps	1	2023-08-14 08:43:59
-42	nipah virus	1	2023-08-14 08:43:59
-43	norovirus	1	2023-08-14 08:43:59
-44	pertussis	1	2023-08-14 08:43:59
-45	plague	1	2023-08-14 08:43:59
-46	pneumococcus pneumonia	1	2023-08-14 08:43:59
-47	poliomyelitis	1	2023-08-14 08:43:59
-48	q fever	1	2023-08-14 08:43:59
-49	rabies	1	2023-08-14 08:43:59
-50	rift valley fever	1	2023-08-14 08:43:59
-51	rotavirus infection	1	2023-08-14 08:43:59
-52	rubella	1	2023-08-14 08:43:59
-53	salmonellosis	1	2023-08-14 08:43:59
-54	SARS-CoV-1	1	2023-08-14 08:43:59
-55	shigellosis	1	2023-08-14 08:43:59
-56	smallpox	1	2023-08-14 08:43:59
-57	staphylococcal enterotoxin b	1	2023-08-14 08:43:59
-58	typhoid fever	1	2023-08-14 08:43:59
-59	tuberculosis	1	2023-08-14 08:43:59
-60	tularemia	1	2023-08-14 08:43:59
-61	vaccinia	1	2023-08-14 08:43:59
-62	varicella	1	2023-08-14 08:43:59
-63	west nile virus	1	2023-08-14 08:43:59
-64	yellow fever	1	2023-08-14 08:43:59
-65	yersiniosis	1	2023-08-14 08:43:59
-66	zika	1	2023-08-14 08:43:59
-67	legionnaires	1	2023-08-14 08:43:59
-68	listeriosis	1	2023-08-14 08:43:59
-69	monkeypox	1	2023-08-14 08:43:59
-70	leishmaniasis	1	2023-08-14 08:43:59
-71	influenza	1	2023-08-14 08:43:59
-72	influenza a/h5n8	1	2023-08-14 08:43:59
-73	avian influenza/unspecified	1	2023-08-14 08:43:59
-74	influenza a/h5n6	1	2023-08-14 08:43:59
-75	pneumonia of unknown origin	1	2023-08-14 08:43:59
-76	hepatitis (unspecified)	1	2023-08-14 08:43:59
-77	influenza/h5n5	1	2023-08-14 08:43:59
-78	influenza/h5n3	1	2023-08-14 08:43:59
-79	anthrax/unspecified	1	2023-08-14 08:43:59
-80	E Coli	1	2023-08-14 08:43:59
-81	influenza b	1	2023-08-14 08:43:59
-82	Staphylococcus	1	2023-08-14 08:43:59
-83	Encephalitis	1	2023-08-14 08:43:59
-84	influenza a/h3n8	1	2023-08-14 08:43:59
-85	Lloviu	1	2023-08-14 08:43:59
-86	leptospirosis	1	2023-08-14 08:43:59
-87	African Swine Fever	1	2023-08-14 08:43:59
-88	enterovirus D68	1	2023-08-14 08:43:59
-89	Echovirus	1	2023-08-14 08:43:59
-90	Creutzfeldt-Jakob disease	1	2023-08-14 08:43:59
-91	Ross River Fever	1	2023-08-14 08:43:59
-92	Barmah Forest virus infection	1	2023-08-14 08:43:59
-93	Syphilis	1	2023-08-14 08:43:59
-94	respiratory syncytial virus	1	2023-08-14 08:43:59
-95	Naegleria fowleri	1	2023-08-14 08:43:59
-96	Tetanus	1	2023-08-14 08:43:59
-97	Ehrlichiosis	1	2023-08-14 08:43:59
-98	Melioidosis	1	2023-08-14 08:43:59
-99	Nalleria Virus	0	2023-08-14 08:43:59
-100	Powassan Virus infection	1	2023-08-14 08:43:59
-101	campylobacteriosis	1	2023-08-14 08:43:59
-102	orthopox virus	1	2023-08-14 08:43:59
-103	Argentine hemorrhagic fever	1	2023-08-14 08:43:59
-104	Scrub typhus	1	2023-08-14 08:43:59
-105	trichinellosis 	1	2023-08-14 08:43:59
-106	sheeppox	1	2023-08-14 08:43:59
-107	Jamestown Canyon virus infection	1	2023-08-14 08:43:59
-108	dirofilariasis	1	2023-08-14 08:43:59
-109	scabies	1	2023-08-14 08:43:59
-110	lyme disease	1	2023-08-14 08:43:59
-111	rocky mountain spotted fever	1	2023-08-14 08:43:59
-112	Dabie bandavirus	1	2023-08-14 08:43:59
-113	cyclosporiasis	1	2023-08-14 08:43:59
-114	burkholderia cepacia complex	1	2023-08-14 08:43:59
-115	mucormycosis	1	2023-08-14 08:43:59
-116	alaskapox	1	2023-08-14 08:43:59
-117	mad cow disease	1	2023-08-14 08:43:59
-118	psittacosis	1	2023-08-14 08:43:59
-119	Eastern Equine Encephalitis 	1	2023-08-14 08:43:59
-120	Japanese Encephalitis	1	2023-08-14 08:43:59
-121	St. Louis encephalitis	1	2023-08-14 08:43:59
-122	Newcastle disease	1	2023-08-14 08:43:59
-123	pseudomonas aeruginosa	1	2023-08-14 08:43:59
-124	Candida 	1	2023-08-14 08:43:59
-125	Kyasanur forest disease	1	2023-08-14 08:43:59
-126	Streptococcus suis	1	2023-08-14 08:43:59
-127	Jingmen tick virus	1	2023-08-14 08:43:59
-128	parvovirus	1	2023-08-14 08:43:59
-129	Hendra virus	1	2023-08-14 08:43:59
-131	meningococcal	1	2023-08-14 08:43:59
-132	Murray Valley Encephalitis	1	2023-08-14 08:43:59
-133	influenza/h5n2	1	2023-08-14 08:43:59
-134	cronobacter	0	2023-08-14 08:43:59
-135	Hansen's disease	1	2023-08-14 08:43:59
-136	heartland virus	1	2023-08-14 08:43:59
-137	Akhmeta virus	1	2023-08-14 08:43:59
-138	Lumpy skin disease	1	2023-08-14 08:43:59
-139	adenovirus	1	2023-08-14 08:43:59
-140	amoeba	1	2023-08-14 08:43:59
-141	Karshi virus	1	2023-08-14 08:43:59
-143	gonorrhea	1	2023-08-14 08:43:59
-144	necrotizing fasciitis	1	2023-08-14 08:43:59
-145	babesiosis	1	2023-08-14 08:43:59
-146	buruli ulcer	1	2023-08-14 08:43:59
-147	herpes simplex virus	1	2023-08-14 08:43:59
-148	herpes b virus	1	2023-08-14 08:43:59
-149	sapovirus	1	2023-08-14 08:43:59
-150	echinococcosis	1	2023-08-14 08:43:59
-151	Rickettsia conorii 	1	2023-08-14 08:43:59
-152	Rickettsia japonica	1	2023-08-14 08:43:59
-153	oropouche fever	1	2023-08-14 08:43:59
-154	bornavirus	1	2023-08-14 08:43:59
-155	Chapare hemorrhagic fever	1	2023-08-14 08:43:59
-156	vibriosis	1	2023-08-14 08:43:59
-157	influenza a/h7n3	1	2023-08-14 08:43:59
-158	acinetobacter 	1	2023-08-14 08:43:59
-159	parechovirus	1	2023-08-14 08:43:59
-160	enterovirus (unspecified)	1	2023-08-14 08:43:59
-161	foot and mouth disease	1	2023-08-14 08:43:59
-162	Influenza A	1	2023-08-14 08:43:59
-163	anaplasmosis	1	2023-08-14 08:43:59
-164	Powassan virus	0	2023-08-14 08:43:59
-165	Equine infectious anemia	1	2023-08-14 08:43:59
-166	Rat Bite Fever	1	2023-08-14 08:43:59
-168	sarbecovirus (unspecified)	1	2023-08-14 08:43:59
-169	Streptobacillus moniliformis	0	2023-08-14 08:43:59
-170	entamoeba moshkovskii	1	2023-08-14 08:43:59
-171	Langya Virus	1	2023-08-14 08:43:59
-172	Usutu Virus	1	2023-08-14 08:43:59
-173	lymphocytic choriomeningitis virus	1	2023-08-14 08:43:59
-174	Human metapneumovirus 	1	2023-08-14 08:43:59
-175	Herpangina	1	2023-08-14 08:43:59
-176	Whipple disease	1	2023-08-14 08:43:59
-177	Group A Streptococcus	1	2023-08-14 08:43:59
-178	Rhinovirus	1	2023-08-14 08:43:59
-179	goatpox	1	2023-08-14 08:43:59
-180	mycoplasma genitalium	1	2023-08-14 08:43:59
-181	influenza a/h10n3	1	2023-08-14 08:43:59
-182	simian virus	1	2023-08-14 08:43:59
-183	onchocerciasis	1	2023-08-14 08:43:59
-184	African Trypanosomiasis	1	2023-08-14 08:43:59
-185	Serratia marcescens	1	2023-08-14 08:43:59
-186	African tick bite fever	1	2023-08-14 08:43:59
-187	Theileriosis	1	2023-08-14 08:43:59
-188	Paratyphoid fever	1	2023-08-14 08:43:59
-189	Bronchiolitis 	0	2023-08-14 08:43:59
-190	Bronchitis 	0	2023-08-14 08:43:59
-191	Gnathostomiasis	1	2023-08-14 08:43:59
-192	Schistosomiasis	1	2023-08-14 08:43:59
-193	Filariasis	1	2023-08-14 08:43:59
-194	Illheus virus	1	2023-08-14 08:43:59
-195	Trypanosoma cruzi	1	2023-08-14 08:43:59
-196	Entamoeba histolytica	1	2023-08-14 08:43:59
-197	mycobacter	1	2023-08-14 08:43:59
-198	Valley Fever	1	2023-08-14 08:43:59
-199	Blastomycosis	1	2023-04-28 09:21:43
+COPY public.disease (id, disease, active, last_updated, hindi_translation, colour) FROM stdin;
+2	other	1	2023-08-14 08:43:59	अन्य	#16c7e2
+4	anthrax/gastrointestinal	1	2023-08-14 08:43:59	गैस्ट्रोइंटेस्टाइनल एंथ्रेक्स	#2c57a0
+5	anthrax/inhalation	1	2023-08-14 08:43:59	इनहेलेशनल एंथ्रेक्स	#4859c4
+6	botulism	1	2023-08-14 08:43:59	बोटुलिज़्म	#1602cc
+7	brucellosis	1	2023-08-14 08:43:59	ब्रूसलोसिस	#621af2
+8	chikungunya	1	2023-08-14 08:43:59	चिकनगुनिया	#601d91
+9	cholera	1	2023-08-14 08:43:59	हैज़ा	#c040dd
+10	covid19	1	2023-08-14 08:43:59	कोविड 19	#ea59e0
+11	cryptococcosis	1	2023-08-14 08:43:59	क्रिप्टोकोकोसिस	#ed04a7
+13	crimean-congo haemorrhagic fever	1	2023-08-14 08:43:59	क्रीमियन कांगो रक्तस्रावी बुखार	#ad2442
+14	dengue	1	2023-08-14 08:43:59	डेंगू	#d1413e
+15	diphtheria	1	2023-08-14 08:43:59	डिप्थीरिया	#e87d5a
+16	ebola haemorrhagic fever	1	2023-08-14 08:43:59	इबोला रक्तस्रावी बुखार	#f28807
+17	ehec (e.coli)	1	2023-08-14 08:43:59	एंटरोहेमोरेजिक एस्चेरिचिया कोलाई	#b58d17
+18	enterovirus 71 infection	1	2023-08-14 08:43:59	एंटरोवायरस 71 संक्रमण	#ddda30
+19	influenza a/h5n1	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन1	#bfdd44
+20	influenza a/h7n9	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच7एन9	#acef5f
+21	influenza a/h9n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच9एन2	#47f209
+22	influenza a/h1n1	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच1एन1	#209b15
+24	influenza a/h3n5	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच3एन5	#48e286
+25	influenza a/h3n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच3एन2	#63f2c0
+26	influenza a/h2n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच2एन2	#0cfcec
+27	hand, foot and mouth disease	1	2023-08-14 08:43:59	हाथ, पैर और मुंह का रोग	#147987
+28	hantavirus	1	2023-08-14 08:43:59	हैंटावायरस	#2a81af
+29	hepatitis a	1	2023-08-14 08:43:59	हेपेटाइटिस ए	#457cd3
+30	hepatitis b	1	2023-08-14 08:43:59	हेपेटाइटिस बी	#6479ef
+31	hepatitis c	1	2023-08-14 08:43:59	हेपेटाइटिस सी	#0e0668
+32	hepatitis d	1	2023-08-14 08:43:59	हेपेटाइटिस डी	#4419a0
+33	hepatitis e	1	2023-08-14 08:43:59	हेपेटाइटिस इ	#8231c4
+35	hiv/aids	1	2023-08-14 08:43:59	एचआईवी/एड्स	#f96bf2
+36	lassa fever	1	2023-08-14 08:43:59	लस्सा बुखार	#c60d92
+37	malaria	1	2023-08-14 08:43:59	मलेरिया	#db257d
+38	marburg virus disease	1	2023-08-14 08:43:59	मारबर्ग वायरस की बीमारी रोग	#d8385d
+39	measles	1	2023-08-14 08:43:59	खसरा	#ef5953
+40	MERS	1	2023-08-14 08:43:59	एम ई आर एस	#cc7459
+41	mumps	1	2023-08-14 08:43:59	कण्ठमाला का रोग गलसुआ	#c1650f
+42	nipah virus	1	2023-08-14 08:43:59	निपाह वायरस	#d39f26
+43	norovirus	1	2023-08-14 08:43:59	नोरोवायरस	#efe940
+44	pertussis	1	2023-08-14 08:43:59	काली खांसी	#d2f759
+45	plague	1	2023-08-14 08:43:59	प्लेग	#a5d660
+47	poliomyelitis	1	2023-08-14 08:43:59	पोलियो	#35ce27
+48	q fever	1	2023-08-14 08:43:59	क्यू बुखार	#41ea5b
+49	rabies	1	2023-08-14 08:43:59	रेबीज	#5cf9a3
+50	rift valley fever	1	2023-08-14 08:43:59	रिफ्ट वैली बुखार	#017f4f
+51	rotavirus infection	1	2023-08-14 08:43:59	रोटावायरस संक्रमण	#11ad9b
+52	rubella	1	2023-08-14 08:43:59	रूबेला	#26b2c1
+53	salmonellosis	1	2023-08-14 08:43:59	साल्मोनेलोसिस	#42ace5
+54	SARS-CoV-1	1	2023-08-14 08:43:59	सार्स सीओवी कोवी1	#395996
+55	shigellosis	1	2023-08-14 08:43:59	शिगेलोसिस	#02197f
+56	smallpox	1	2023-08-14 08:43:59	चेचक	#1c12a8
+58	typhoid fever	1	2023-08-14 08:43:59	टाइफाइड टाइफायड बुखार	#a147ef
+59	tuberculosis	1	2023-08-14 08:43:59	क्षय रोग	#bc54d8
+60	tularemia	1	2023-08-14 08:43:59	टुलरेमिया	#ce06c7
+61	vaccinia	1	2023-08-14 08:43:59	वैक्सीनिया	#e01aab
+62	varicella	1	2023-08-14 08:43:59	वेरिसेला	#ef3492
+63	west nile virus	1	2023-08-14 08:43:59	वेस्ट नील वायरस	#f94d7b
+64	yellow fever	1	2023-08-14 08:43:59	पीला बुखार	#db57ba
+65	yersiniosis	1	2023-08-14 08:43:59	यर्सिनिओसिस	#b22f07
+66	zika	1	2023-08-14 08:43:59	जीका	#dd761c
+67	legionnaires	1	2023-08-14 08:43:59	लीजियोनेयर्स	#efc137
+68	listeriosis	1	2023-08-14 08:43:59	लिस्टेरियोसिस	#d6cc44
+69	monkeypox	1	2023-08-14 08:43:59	मंकीपॉक्स	#c1d858
+71	influenza	1	2023-08-14 08:43:59	इंफ्लुएंजा	#5cd81e
+72	influenza a/h5n8	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन8	#44f43a
+73	avian influenza/unspecified	1	2023-08-14 08:43:59	अनिर्दिष्ट एवियन इन्फ्लूएंजा	#41c651
+74	influenza a/h5n6	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन6	#5ddd8e
+75	pneumonia of unknown origin	0	2023-11-23 15:10:53	अज्ञात उत्पत्ति का निमोनिया	#0bbc75
+76	hepatitis (unspecified)	1	2023-08-14 08:43:59	हेपेटाइटिस (अनिर्दिष्ट)	#22e2c2
+77	influenza/h5n5	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन5	#3ddbf7
+78	influenza/h5n3	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन3	#367da0
+80	E Coli	1	2023-08-14 08:43:59	ई कोलाई	#0d30bf
+81	influenza b	1	2023-08-14 08:43:59	इंफ्लुएंजा बी	#2a24e2
+82	Staphylococcus	1	2023-08-14 08:43:59	स्टैफिलोकोकस	#492591
+83	Encephalitis	1	2023-08-14 08:43:59	इंसेफेलाइटिस	#7c3fb5
+84	influenza a/h3n8	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच3एन8	#c966e8
+85	Lloviu	1	2023-08-14 08:43:59	ल्वोवियू	#e812e8
+86	leptospirosis	1	2023-08-14 08:43:59	लेप्टोस्पायरोसिस	#f72ac4
+88	enterovirus D68	1	2023-08-14 08:43:59	एंटरोवायरस डीd68	#d34c72
+89	Echovirus	1	2023-08-14 08:43:59	इकोवायरस	#e8686e
+90	Creutzfeldt-Jakob disease	1	2023-08-14 08:43:59	क्रूट्जफेल्डट-जाकोब रोग	#e04014
+91	Ross River Fever	1	2023-08-14 08:43:59	रॉस नदी रिवर बुखार	#fc8a2d
+92	Barmah Forest virus infection	1	2023-08-14 08:43:59	बरमाह वन वायरस संक्रमण	#bf9335
+93	Syphilis	1	2023-08-14 08:43:59	सिफलिस	#e8d955
+94	respiratory syncytial virus	1	2023-08-14 08:43:59	रेस्पिरेटरी सिंकाइटियल वायरस	#a7c401
+95	Naegleria fowleri	1	2023-08-14 08:43:59	नेगलेरिया फ्यूलेरी	#8de817
+96	Tetanus	1	2023-08-14 08:43:59	टेटनस	#4fa31f
+97	Ehrlichiosis	1	2023-08-14 08:43:59	एहर्लिचियोसिस	#4ccc3b
+98	Melioidosis	1	2023-08-14 08:43:59	मेलियोइडोसिस	#56e264
+99	Nalleria Virus	0	2023-08-14 08:43:59	नलेरिया वायरस	#04d14f
+101	campylobacteriosis	1	2023-08-14 08:43:59	कम्प्य्लोबक्तेरिओसिस	#22ad93
+102	orthopox virus	1	2023-08-14 08:43:59	ऑर्थोपॉक्स वायरस	#34a3ad
+103	Argentine hemorrhagic fever	1	2023-08-14 08:43:59	अर्जेंटीना रक्तस्रावी बुखार	#50a8ce
+104	Scrub typhus	1	2023-08-14 08:43:59	स्क्रब टाइफस	#0665d8
+105	trichinellosis 	1	2023-08-14 08:43:59	ट्राइचिनेलोसिस	#1d42f9
+106	sheeppox	1	2023-08-14 08:43:59	शीपपॉक्स	#1f1d8c
+108	dirofilariasis	1	2023-08-14 08:43:59	डायरोफिलेरियासिस	#9b57db
+109	scabies	1	2023-08-14 08:43:59	खाज-खुजली (स्केबीज)	#b809f2
+110	lyme disease	1	2023-08-14 08:43:59	लाइम रोग	#c119c4
+111	rocky mountain spotted fever	1	2023-08-14 08:43:59	रॉकी पहाड़ माउंटेन स्पॉटेड बुखार	#d82fb4
+112	Dabie bandavirus	1	2023-08-14 08:43:59	डाबी बैंडावायरस	#e5499f
+113	cyclosporiasis	1	2023-08-14 08:43:59	साइक्लोस्पोरियासिस	#ed618b
+114	burkholderia cepacia complex	1	2023-08-14 08:43:59	बुर्कहोल्डरिया सेपसिया कॉम्प्लेक्स	#f40c17
+115	mucormycosis	1	2023-08-14 08:43:59	म्यूकोमायकोसिस     म्यूकरमायकोसिस	#9e2f16
+116	alaskapox	1	2023-08-14 08:43:59	अलास्कापॉक्स	#cc702e
+117	mad cow disease	1	2023-08-14 08:43:59	पागल गाय की बीमारी मैड काऊ रोग	#e0ae4a
+118	psittacosis	1	2023-08-14 08:43:59	साइटाकोसिस	#f7ed67
+119	Eastern Equine Encephalitis 	1	2023-08-14 08:43:59	पूर्वी इक्वीन इंसेफेलाइटिस	#dcfc0f
+120	Japanese Encephalitis	1	2023-08-14 08:43:59	जापानी मस्तिष्ककोप	#6fa518
+121	St. Louis encephalitis	1	2023-08-14 08:43:59	सेंट लुइस इंसेफेलाइटिस	#70ce31
+122	Newcastle disease	1	2023-08-14 08:43:59	न्यूकैसल बीमारी रोग	#63e84e
+124	Candida 	1	2023-08-14 08:43:59	कैंडिडा	#087f2e
+125	Kyasanur forest disease	1	2023-08-14 08:43:59	कयासनूर वन रोग	#1cb271
+126	Streptococcus suis	1	2023-08-14 08:43:59	स्ट्रेप्टोकोकस सूइस	#35d6b8
+127	Jingmen tick virus	1	2023-08-14 08:43:59	जिंगमेन टिक वायरस	#4dd6dd
+128	parvovirus	1	2023-08-14 08:43:59	परोवोवायरस पार्वोवायरस	#6cc6f7
+129	Hendra virus	1	2023-08-14 08:43:59	हेंद्रा वायरस	#093e77
+131	meningococcal	1	2023-08-14 08:43:59	मेनिंगोकोकल	#3333c6
+132	Murray Valley Encephalitis	1	2023-08-14 08:43:59	मरे घाटी इंसेफेलाइटिस	#7752e5
+133	influenza/h5n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन2	#804caa
+135	Hansen's disease	1	2023-08-14 08:43:59	कुष्ठ रोग	#da28e0
+136	heartland virus	1	2023-08-14 08:43:59	हार्टलैंड वायरस	#ed40ca
+137	Akhmeta virus	1	2023-08-14 08:43:59	अखमेटा वायरस	#f75bb3
+138	Lumpy skin disease	1	2023-08-14 08:43:59	गांठदार त्वचा रोग	#89012c
+139	adenovirus	1	2023-08-14 08:43:59	एडिनोवायरस	#ad111b
+140	amoeba	1	2023-08-14 08:43:59	अमीबा	#cc4226
+141	Karshi virus	1	2023-08-14 08:43:59	कार्शी वायरस	#e88543
+143	gonorrhea	1	2023-08-14 08:43:59	गोनोरिया	#c9af04
+144	necrotizing fasciitis	1	2023-08-14 08:43:59	नेक्रोटाइजिंग फेसिसाइटिस फेशिआइटिस	#9daf13
+145	babesiosis	1	2023-08-14 08:43:59	बेब्सियोसिस	#97d62a
+146	buruli ulcer	1	2023-08-14 08:43:59	बुरुली अल्सर	#82ef47
+147	herpes simplex virus	1	2023-08-14 08:43:59	हरपीज सिंप्लेक्स वायरस	#66cc4f
+148	herpes b virus	1	2023-08-14 08:43:59	हरपीज बी वायरस	#048e0f
+149	sapovirus	1	2023-08-14 08:43:59	सैपोवायरस	#16ba47
+150	echinococcosis	1	2023-08-14 08:43:59	इचिनोकोकोसिस	#2fe090
+1	unknown	1	2023-08-14 08:43:59	अनजान	#6aede0
+3	anthrax/cutaneous	1	2023-08-14 08:43:59	त्वचीय एंथ्रेक्स	#164c75
+12	cryptosporidiosis	1	2023-08-14 08:43:59	क्रिप्टोस्पोरिडियोसिस	#fc1e82
+23	influenza a/h1n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच1एन2	#2dc649
+34	histoplasmosis	1	2023-08-14 08:43:59	हिस्टोप्लाज्मोसिस	#d252f2
+46	pneumococcus pneumonia	1	2023-08-14 08:43:59	न्यूमोकोकस निमोनिया	#40a30e
+57	staphylococcal enterotoxin b	1	2023-08-14 08:43:59	स्टैफिलोकोकल एंटरोटॉक्सिन बी	#5e2cd3
+70	leishmaniasis	1	2023-08-14 08:43:59	लीशमैनियासिस काला अजार	#6eb208
+79	anthrax/unspecified	1	2023-08-14 08:43:59	अनिर्दिष्ट एंथ्रेक्स	#5586c6
+87	African Swine Fever	1	2023-08-14 08:43:59	अफ्रीकी स्वाइन बुखार	#d33988
+100	Powassan Virus infection	1	2023-08-14 08:43:59	पोवासन वायरस संक्रमण	#1af2a3
+107	Jamestown Canyon virus infection	1	2023-08-14 08:43:59	जेम्सटाउन घाटी वायरस संक्रमण	#5838b7
+123	pseudomonas aeruginosa	1	2023-08-14 08:43:59	स्यूडोमोनास एरुगिनोसा	#6af77d
+134	cronobacter	0	2023-08-14 08:43:59	डाबी बैंडावायरस/ क्रोनोबैक्टर	#9712cc
+151	Rickettsia conorii 	1	2023-08-14 08:43:59	रिकेट्सिया कोनोरी	#4bf4db
+153	oropouche fever	1	2023-08-14 08:43:59	ओरोपोचे बुखार	#05668c
+154	bornavirus	1	2023-08-14 08:43:59	बोर्नावायरस	#1766b5
+155	Chapare hemorrhagic fever	1	2023-08-14 08:43:59	चपारे रक्तस्रावी बुखार	#2f5cd8
+156	vibriosis	1	2023-08-14 08:43:59	विब्रियोसिस	#544ff7
+157	influenza a/h7n3	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच7एन3	#5d46aa
+158	acinetobacter 	1	2023-08-14 08:43:59	एसिनेटोबैक्टर	#5008a3
+159	parechovirus	1	2023-08-14 08:43:59	पारेकोवायरस	#931bc6
+161	foot and mouth disease	1	2023-08-14 08:43:59	पैर और मुंह का रोग	#d345b9
+162	Influenza A	1	2023-08-14 08:43:59	इंफ्लुएंजा ए	#dd5da8
+163	anaplasmosis	1	2023-08-14 08:43:59	एनाप्लाज्मोसिस	#bc0b46
+164	Powassan virus	0	2023-08-14 08:43:59	पोवासन वायरस	#d82032
+165	Equine infectious anemia	1	2023-08-14 08:43:59	इक्विन संक्रामक एनीमिया	#f2553a
+166	Rat Bite Fever	1	2023-08-14 08:43:59	चूहे के काटने का बुखार	#c67543
+168	sarbecovirus (unspecified)	1	2023-08-14 08:43:59	सार्बेकोवायरस (अनिर्दिष्ट)	#e2c30f
+169	Streptobacillus moniliformis	0	2023-08-14 08:43:59	स्ट्रेप्टोबैसिलस मोनिलिफॉर्मिस	#c6e224
+170	entamoeba moshkovskii	1	2023-08-14 08:43:59	खरगोश बुखार	#b8f93e
+171	Langya Virus	1	2023-08-14 08:43:59	लंग्या वायरस	#80ce48
+172	Usutu Virus	1	2023-08-14 08:43:59	उसुतु वायरस	#7de263
+174	Human metapneumovirus 	1	2023-08-14 08:43:59	मानव मेटान्यूमोवायरस	#27ea68
+175	Herpangina	1	2023-08-14 08:43:59	हर्पंगीना हरपंजैना	#2fb576
+176	Whipple disease	1	2023-08-14 08:43:59	व्हिपल की बीमारी रोग	#4cd3b6
+177	Group A Streptococcus	1	2023-08-14 08:43:59	ग्रुप ए स्ट्रेप्टोकोकस	#5ed1d1
+178	Rhinovirus	1	2023-08-14 08:43:59	राइनोवायरस	#12a0cc
+179	goatpox	1	2023-08-14 08:43:59	बकरीपॉक्स	#2a85ed
+180	mycoplasma genitalium	1	2023-08-14 08:43:59	मायकोबैक्टर	#25428c
+181	influenza a/h10n3	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच10एन3	#4246b5
+182	simian virus	1	2023-08-14 08:43:59	सिमियन वायरस	#2501b2
+183	onchocerciasis	1	2023-08-14 08:43:59	ओंकोसेरसियासिस	#6e15db
+184	African Trypanosomiasis	1	2023-08-14 08:43:59	अफ्रीकी ट्रिपैनोसोमियासिस	#c52ffc
+185	Serratia marcescens	1	2023-08-14 08:43:59	सेराटिया मार्सेसेंस	#c93bd6
+186	African tick bite fever	1	2023-08-14 08:43:59	अफ्रीकी टिक काटने का बुखार	#e557d0
+187	Theileriosis	1	2023-08-14 08:43:59	थीइलेरियोसिस	#e20486
+188	Paratyphoid fever	1	2023-08-14 08:43:59	पैराटाइफाइड बुखार	#ea1962
+189	Bronchiolitis 	0	2023-08-14 08:43:59	ब्रोंकियोलाइटिस	#9b1f2d
+191	Gnathostomiasis	1	2023-08-14 08:43:59	ग्नथोस्टोमियासिस	#e88c5a
+192	Schistosomiasis	1	2023-08-14 08:43:59	शिस्टोसोमियासिस	#e58c06
+193	Filariasis	1	2023-08-14 08:43:59	फाइलेरिया	#f9d81d
+194	Illheus virus	1	2023-08-14 08:43:59	इलियस वायरस	#a4af24
+195	Trypanosoma cruzi	1	2023-08-14 08:43:59	ट्रिपानोसोमा क्रूज़ी	#a5d13e
+196	Entamoeba histolytica	1	2023-08-14 08:43:59	एंटअमीबा हिस्टोलीटिका	#99e85c
+197	mycobacter	1	2023-08-14 08:43:59	मायकोबैक्टर	#2bdb08
+198	Valley Fever	1	2023-08-14 08:43:59	घाटी बुखार	#20fc28
+199	Blastomycosis	1	2023-04-28 09:21:43	\N	#28b750
+200	influenza a/h7n2	1	2023-11-23 14:14:50	\N	#43d88d
+201	influenza a/h1n7	1	2023-11-23 14:15:41	\N	#61edcc
+202	influenza a/h13n6	1	2023-11-23 14:15:50	\N	#0bdbe2
+203	influenza a/h4n8	1	2023-11-23 14:16:02	\N	#0f5b70
+205	influenza a/h8n4	1	2023-11-23 14:16:23	\N	#3e63c1
+206	influenza a/h14n5	1	2023-11-23 14:16:43	\N	#5e64e0
+207	influenza a/h6n5	1	2023-11-23 14:16:55	\N	#460eef
+208	influenza a/h12n5	1	2023-11-23 14:17:05	\N	#46158c
+210	influenza a/h11n6	1	2023-11-23 14:17:48	\N	#da4dea
+211	mycoplasma pneumoniae	1	2023-11-23 15:12:42	\N	#f469df
+152	Rickettsia japonica	1	2023-08-14 08:43:59	रिकेट्सिया जपोनिका	#409da0
+160	enterovirus (unspecified)	1	2023-08-14 08:43:59	एंटरोवायरस, अनिर्दिष्ट	#e838f4
+173	lymphocytic choriomeningitis virus	1	2023-08-14 08:43:59	लिम्फोसाइटिक कोरियोमेनिंगाइटिस वायरस	#10c919
+190	Bronchitis 	0	2023-08-14 08:43:59	श्वासनली-शोथ/ ब्रोंकाइटिस	#c44938
+209	influenza a/h7n6	1	2023-11-23 14:17:14	\N	#832ab2
 \.
 
 
@@ -6554,6 +6584,7 @@ COPY public.report_data_point_location (id, report_id, latitude, longitude, dist
 162215	162721	13.7308	100.521						185
 162216	162722	30.043488	31.235292		Cairo			Cairo	56
 162217	162723	27.6939	85.3157						143
+162315	162823	8.99427	-79.5188						148
 162218	162724	36.845127	-75.975437		Virginia Beach		Virginia Beach	VA	198
 162219	162725	52.26	21.02						153
 162220	162726	52.26	21.02						153
@@ -6644,7 +6675,6 @@ COPY public.report_data_point_location (id, report_id, latitude, longitude, dist
 162312	162820	8.99427	-79.5188						148
 162313	162821	8.99427	-79.5188						148
 162314	162822	8.99427	-79.5188						148
-162315	162823	8.99427	-79.5188						148
 162316	162824	8.99427	-79.5188						148
 162317	162825	8.99427	-79.5188						148
 162318	162826	8.99427	-79.5188						148
@@ -7501,254 +7531,254 @@ COPY public.report_data_point_syndrome (id, report_id, syndrome_id) FROM stdin;
 -- Data for Name: subregions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.subregions (id, subregion, iso3) FROM stdin;
-0	Northern Africa	DZA
-1	Northern Africa	EGY
-2	Northern Africa	LBY
-3	Northern Africa	MAR
-4	Northern Africa	SDN
-5	Northern Africa	TUN
-6	Northern Africa	ESH
-7	Sub-Saharan Africa	IOT
-8	Sub-Saharan Africa	BDI
-9	Sub-Saharan Africa	COM
-10	Sub-Saharan Africa	DJI
-11	Sub-Saharan Africa	ERI
-12	Sub-Saharan Africa	ETH
-13	Sub-Saharan Africa	ATF
-14	Sub-Saharan Africa	KEN
-15	Sub-Saharan Africa	MDG
-16	Sub-Saharan Africa	MWI
-17	Sub-Saharan Africa	MUS
-18	Sub-Saharan Africa	MYT
-19	Sub-Saharan Africa	MOZ
-20	Sub-Saharan Africa	REU
-21	Sub-Saharan Africa	RWA
-22	Sub-Saharan Africa	SYC
-23	Sub-Saharan Africa	SOM
-24	Sub-Saharan Africa	SSD
-25	Sub-Saharan Africa	UGA
-26	Sub-Saharan Africa	TZA
-27	Sub-Saharan Africa	ZMB
-28	Sub-Saharan Africa	ZWE
-29	Sub-Saharan Africa	AGO
-30	Sub-Saharan Africa	CMR
-31	Sub-Saharan Africa	CAF
-32	Sub-Saharan Africa	TCD
-33	Sub-Saharan Africa	COG
-34	Sub-Saharan Africa	COD
-35	Sub-Saharan Africa	GNQ
-36	Sub-Saharan Africa	GAB
-37	Sub-Saharan Africa	STP
-38	Sub-Saharan Africa	BWA
-39	Sub-Saharan Africa	SWZ
-40	Sub-Saharan Africa	LSO
-41	Sub-Saharan Africa	NAM
-42	Sub-Saharan Africa	ZAF
-43	Sub-Saharan Africa	BEN
-44	Sub-Saharan Africa	BFA
-45	Sub-Saharan Africa	CPV
-46	Sub-Saharan Africa	CIV
-47	Sub-Saharan Africa	GMB
-48	Sub-Saharan Africa	GHA
-49	Sub-Saharan Africa	GIN
-50	Sub-Saharan Africa	GNB
-51	Sub-Saharan Africa	LBR
-52	Sub-Saharan Africa	MLI
-53	Sub-Saharan Africa	MRT
-54	Sub-Saharan Africa	NER
-55	Sub-Saharan Africa	NGA
-56	Sub-Saharan Africa	SHN
-57	Sub-Saharan Africa	SEN
-58	Sub-Saharan Africa	SLE
-59	Sub-Saharan Africa	TGO
-60	Latin America and the Caribbean	AIA
-61	Latin America and the Caribbean	ATG
-62	Latin America and the Caribbean	ABW
-63	Latin America and the Caribbean	BHS
-64	Latin America and the Caribbean	BRB
-65	Latin America and the Caribbean	BES
-66	Latin America and the Caribbean	VGB
-67	Latin America and the Caribbean	CYM
-68	Latin America and the Caribbean	CUB
-69	Latin America and the Caribbean	CUW
-70	Latin America and the Caribbean	DMA
-71	Latin America and the Caribbean	DOM
-72	Latin America and the Caribbean	GRD
-73	Latin America and the Caribbean	GLP
-74	Latin America and the Caribbean	HTI
-75	Latin America and the Caribbean	JAM
-76	Latin America and the Caribbean	MTQ
-77	Latin America and the Caribbean	MSR
-78	Latin America and the Caribbean	PRI
-79	Latin America and the Caribbean	BLM
-80	Latin America and the Caribbean	KNA
-81	Latin America and the Caribbean	LCA
-82	Latin America and the Caribbean	MAF
-83	Latin America and the Caribbean	VCT
-84	Latin America and the Caribbean	SXM
-85	Latin America and the Caribbean	TTO
-86	Latin America and the Caribbean	TCA
-87	Latin America and the Caribbean	VIR
-88	Latin America and the Caribbean	BLZ
-89	Latin America and the Caribbean	CRI
-90	Latin America and the Caribbean	SLV
-91	Latin America and the Caribbean	GTM
-92	Latin America and the Caribbean	HND
-93	Latin America and the Caribbean	MEX
-94	Latin America and the Caribbean	NIC
-95	Latin America and the Caribbean	PAN
-96	Latin America and the Caribbean	ARG
-97	Latin America and the Caribbean	BOL
-98	Latin America and the Caribbean	BVT
-99	Latin America and the Caribbean	BRA
-100	Latin America and the Caribbean	CHL
-101	Latin America and the Caribbean	COL
-102	Latin America and the Caribbean	ECU
-103	Latin America and the Caribbean	FLK
-104	Latin America and the Caribbean	GUF
-105	Latin America and the Caribbean	GUY
-106	Latin America and the Caribbean	PRY
-107	Latin America and the Caribbean	PER
-108	Latin America and the Caribbean	SGS
-109	Latin America and the Caribbean	SUR
-110	Latin America and the Caribbean	URY
-111	Latin America and the Caribbean	VEN
-112	Northern America	BMU
-113	Northern America	CAN
-114	Northern America	GRL
-115	Northern America	SPM
-116	Northern America	USA
-117	Central Asia	KAZ
-118	Central Asia	KGZ
-119	Central Asia	TJK
-120	Central Asia	TKM
-121	Central Asia	UZB
-122	Eastern Asia	CHN
-123	Eastern Asia	HKG
-124	Eastern Asia	MAC
-125	Eastern Asia	PRK
-126	Eastern Asia	JPN
-127	Eastern Asia	MNG
-128	Eastern Asia	KOR
-129	South-eastern Asia	BRN
-130	South-eastern Asia	KHM
-131	South-eastern Asia	IDN
-132	South-eastern Asia	LAO
-133	South-eastern Asia	MYS
-134	South-eastern Asia	MMR
-135	South-eastern Asia	PHL
-136	South-eastern Asia	SGP
-137	South-eastern Asia	THA
-138	South-eastern Asia	TLS
-139	South-eastern Asia	VNM
-140	Southern Asia	AFG
-141	Southern Asia	BGD
-142	Southern Asia	BTN
-143	Southern Asia	IND
-144	Southern Asia	IRN
-145	Southern Asia	MDV
-146	Southern Asia	NPL
-147	Southern Asia	PAK
-148	Southern Asia	LKA
-149	Western Asia	ARM
-150	Western Asia	AZE
-151	Western Asia	BHR
-152	Western Asia	CYP
-153	Western Asia	GEO
-154	Western Asia	IRQ
-155	Western Asia	ISR
-156	Western Asia	JOR
-157	Western Asia	KWT
-158	Western Asia	LBN
-159	Western Asia	OMN
-160	Western Asia	QAT
-161	Western Asia	SAU
-162	Western Asia	PSE
-163	Western Asia	SYR
-164	Western Asia	TUR
-165	Western Asia	ARE
-166	Western Asia	YEM
-167	Eastern Europe	BLR
-168	Eastern Europe	BGR
-169	Eastern Europe	CZE
-170	Eastern Europe	HUN
-171	Eastern Europe	POL
-172	Eastern Europe	MDA
-173	Eastern Europe	ROU
-174	Eastern Europe	RUS
-175	Eastern Europe	SVK
-176	Eastern Europe	UKR
-177	Northern Europe	ALA
-178	Northern Europe	GGY
-179	Northern Europe	JEY
-180	Northern Europe	DNK
-181	Northern Europe	EST
-182	Northern Europe	FRO
-183	Northern Europe	FIN
-184	Northern Europe	ISL
-185	Northern Europe	IRL
-186	Northern Europe	IMN
-187	Northern Europe	LVA
-188	Northern Europe	LTU
-189	Northern Europe	NOR
-190	Northern Europe	SJM
-191	Northern Europe	SWE
-192	Northern Europe	GBR
-193	Southern Europe	ALB
-194	Southern Europe	AND
-195	Southern Europe	BIH
-196	Southern Europe	HRV
-197	Southern Europe	GIB
-198	Southern Europe	GRC
-199	Southern Europe	VAT
-200	Southern Europe	ITA
-201	Southern Europe	MLT
-202	Southern Europe	MNE
-203	Southern Europe	MKD
-204	Southern Europe	PRT
-205	Southern Europe	SMR
-206	Southern Europe	SRB
-207	Southern Europe	SVN
-208	Southern Europe	ESP
-209	Western Europe	AUT
-210	Western Europe	BEL
-211	Western Europe	FRA
-212	Western Europe	DEU
-213	Western Europe	LIE
-214	Western Europe	LUX
-215	Western Europe	MCO
-216	Western Europe	NLD
-217	Western Europe	CHE
-218	Australia and New Zealand	AUS
-219	Australia and New Zealand	CXR
-220	Australia and New Zealand	CCK
-221	Australia and New Zealand	HMD
-222	Australia and New Zealand	NZL
-223	Australia and New Zealand	NFK
-224	Melanesia	FJI
-225	Melanesia	NCL
-226	Melanesia	PNG
-227	Melanesia	SLB
-228	Melanesia	VUT
-229	Micronesia	GUM
-230	Micronesia	KIR
-231	Micronesia	MHL
-232	Micronesia	FSM
-233	Micronesia	NRU
-234	Micronesia	MNP
-235	Micronesia	PLW
-236	Micronesia	UMI
-237	Polynesia	ASM
-238	Polynesia	COK
-239	Polynesia	PYF
-240	Polynesia	NIU
-241	Polynesia	PCN
-242	Polynesia	WSM
-243	Polynesia	TKL
-244	Polynesia	TON
-245	Polynesia	TUV
-246	Polynesia	WLF
+COPY public.subregions (id, subregion, iso3, hindi_translation) FROM stdin;
+7	Sub-Saharan Africa	IOT	उप-सहारा अफ्रीका
+8	Sub-Saharan Africa	BDI	उप-सहारा अफ्रीका
+9	Sub-Saharan Africa	COM	उप-सहारा अफ्रीका
+60	Latin America and the Caribbean	AIA	लैटिन अमेरिका और कैरेबियना
+61	Latin America and the Caribbean	ATG	लैटिन अमेरिका और कैरेबियना
+62	Latin America and the Caribbean	ABW	लैटिन अमेरिका और कैरेबियना
+63	Latin America and the Caribbean	BHS	लैटिन अमेरिका और कैरेबियना
+64	Latin America and the Caribbean	BRB	लैटिन अमेरिका और कैरेबियना
+65	Latin America and the Caribbean	BES	लैटिन अमेरिका और कैरेबियना
+66	Latin America and the Caribbean	VGB	लैटिन अमेरिका और कैरेबियना
+67	Latin America and the Caribbean	CYM	लैटिन अमेरिका और कैरेबियना
+68	Latin America and the Caribbean	CUB	लैटिन अमेरिका और कैरेबियना
+69	Latin America and the Caribbean	CUW	लैटिन अमेरिका और कैरेबियना
+70	Latin America and the Caribbean	DMA	लैटिन अमेरिका और कैरेबियना
+71	Latin America and the Caribbean	DOM	लैटिन अमेरिका और कैरेबियना
+72	Latin America and the Caribbean	GRD	लैटिन अमेरिका और कैरेबियना
+73	Latin America and the Caribbean	GLP	लैटिन अमेरिका और कैरेबियना
+74	Latin America and the Caribbean	HTI	लैटिन अमेरिका और कैरेबियना
+75	Latin America and the Caribbean	JAM	लैटिन अमेरिका और कैरेबियना
+76	Latin America and the Caribbean	MTQ	लैटिन अमेरिका और कैरेबियना
+77	Latin America and the Caribbean	MSR	लैटिन अमेरिका और कैरेबियना
+78	Latin America and the Caribbean	PRI	लैटिन अमेरिका और कैरेबियना
+79	Latin America and the Caribbean	BLM	लैटिन अमेरिका और कैरेबियना
+112	Northern America	BMU	उत्तरी अमेरिका
+113	Northern America	CAN	उत्तरी अमेरिका
+114	Northern America	GRL	उत्तरी अमेरिका
+115	Northern America	SPM	उत्तरी अमेरिका
+116	Northern America	USA	उत्तरी अमेरिका
+117	Central Asia	KAZ	मध्य एशिया
+118	Central Asia	KGZ	मध्य एशिया
+119	Central Asia	TJK	मध्य एशिया
+120	Central Asia	TKM	मध्य एशिया
+121	Central Asia	UZB	मध्य एशिया
+122	Eastern Asia	CHN	पूर्वी एशिया
+123	Eastern Asia	HKG	पूर्वी एशिया
+124	Eastern Asia	MAC	पूर्वी एशिया
+125	Eastern Asia	PRK	पूर्वी एशिया
+126	Eastern Asia	JPN	पूर्वी एशिया
+127	Eastern Asia	MNG	पूर्वी एशिया
+128	Eastern Asia	KOR	पूर्वी एशिया
+129	South-eastern Asia	BRN	दक्षिण-पूर्वी एशिया
+130	South-eastern Asia	KHM	दक्षिण-पूर्वी एशिया
+0	Northern Africa	DZA	उत्तरी अफ्रीका
+1	Northern Africa	EGY	उत्तरी अफ्रीका
+2	Northern Africa	LBY	उत्तरी अफ्रीका
+3	Northern Africa	MAR	उत्तरी अफ्रीका
+4	Northern Africa	SDN	उत्तरी अफ्रीका
+5	Northern Africa	TUN	उत्तरी अफ्रीका
+6	Northern Africa	ESH	उत्तरी अफ्रीका
+10	Sub-Saharan Africa	DJI	उप-सहारा अफ्रीका
+11	Sub-Saharan Africa	ERI	उप-सहारा अफ्रीका
+12	Sub-Saharan Africa	ETH	उप-सहारा अफ्रीका
+13	Sub-Saharan Africa	ATF	उप-सहारा अफ्रीका
+14	Sub-Saharan Africa	KEN	उप-सहारा अफ्रीका
+15	Sub-Saharan Africa	MDG	उप-सहारा अफ्रीका
+16	Sub-Saharan Africa	MWI	उप-सहारा अफ्रीका
+17	Sub-Saharan Africa	MUS	उप-सहारा अफ्रीका
+18	Sub-Saharan Africa	MYT	उप-सहारा अफ्रीका
+19	Sub-Saharan Africa	MOZ	उप-सहारा अफ्रीका
+20	Sub-Saharan Africa	REU	उप-सहारा अफ्रीका
+21	Sub-Saharan Africa	RWA	उप-सहारा अफ्रीका
+140	Southern Asia	AFG	दक्षिणी एशिया
+141	Southern Asia	BGD	दक्षिणी एशिया
+142	Southern Asia	BTN	दक्षिणी एशिया
+143	Southern Asia	IND	दक्षिणी एशिया
+144	Southern Asia	IRN	दक्षिणी एशिया
+145	Southern Asia	MDV	दक्षिणी एशिया
+149	Western Asia	ARM	पश्चिमी एशिया
+150	Western Asia	AZE	पश्चिमी एशिया
+151	Western Asia	BHR	पश्चिमी एशिया
+152	Western Asia	CYP	पश्चिमी एशिया
+167	Eastern Europe	BLR	पूर्वी यूरोप
+168	Eastern Europe	BGR	पूर्वी यूरोप
+169	Eastern Europe	CZE	पूर्वी यूरोप
+170	Eastern Europe	HUN	पूर्वी यूरोप
+171	Eastern Europe	POL	पूर्वी यूरोप
+172	Eastern Europe	MDA	पूर्वी यूरोप
+173	Eastern Europe	ROU	पूर्वी यूरोप
+174	Eastern Europe	RUS	पूर्वी यूरोप
+175	Eastern Europe	SVK	पूर्वी यूरोप
+176	Eastern Europe	UKR	पूर्वी यूरोप
+177	Northern Europe	ALA	उत्तरी यूरोप
+178	Northern Europe	GGY	उत्तरी यूरोप
+179	Northern Europe	JEY	उत्तरी यूरोप
+180	Northern Europe	DNK	उत्तरी यूरोप
+181	Northern Europe	EST	उत्तरी यूरोप
+193	Southern Europe	ALB	दक्षिणी यूरोप
+194	Southern Europe	AND	दक्षिणी यूरोप
+195	Southern Europe	BIH	दक्षिणी यूरोप
+196	Southern Europe	HRV	दक्षिणी यूरोप
+197	Southern Europe	GIB	दक्षिणी यूरोप
+198	Southern Europe	GRC	दक्षिणी यूरोप
+199	Southern Europe	VAT	दक्षिणी यूरोप
+200	Southern Europe	ITA	दक्षिणी यूरोप
+209	Western Europe	AUT	पश्चिमी यूरोप
+210	Western Europe	BEL	पश्चिमी यूरोप
+211	Western Europe	FRA	पश्चिमी यूरोप
+212	Western Europe	DEU	पश्चिमी यूरोप
+213	Western Europe	LIE	पश्चिमी यूरोप
+214	Western Europe	LUX	पश्चिमी यूरोप
+215	Western Europe	MCO	पश्चिमी यूरोप
+216	Western Europe	NLD	पश्चिमी यूरोप
+217	Western Europe	CHE	पश्चिमी यूरोप
+218	Australia and New Zealand	AUS	ऑस्ट्रेलिया और न्यूजीलैंड
+219	Australia and New Zealand	CXR	ऑस्ट्रेलिया और न्यूजीलैंड
+220	Australia and New Zealand	CCK	ऑस्ट्रेलिया और न्यूजीलैंड
+224	Melanesia	FJI	मेलानेशिया
+225	Melanesia	NCL	मेलानेशिया
+226	Melanesia	PNG	मेलानेशिया
+227	Melanesia	SLB	मेलानेशिया
+229	Micronesia	GUM	माइक्रोनेशिया
+230	Micronesia	KIR	माइक्रोनेशिया
+231	Micronesia	MHL	माइक्रोनेशिया
+237	Polynesia	ASM	पोलीनेशियाा
+238	Polynesia	COK	पोलीनेशियाा
+239	Polynesia	PYF	पोलीनेशियाा
+240	Polynesia	NIU	पोलीनेशियाा
+241	Polynesia	PCN	पोलीनेशियाा
+22	Sub-Saharan Africa	SYC	उप-सहारा अफ्रीका
+23	Sub-Saharan Africa	SOM	उप-सहारा अफ्रीका
+24	Sub-Saharan Africa	SSD	उप-सहारा अफ्रीका
+25	Sub-Saharan Africa	UGA	उप-सहारा अफ्रीका
+26	Sub-Saharan Africa	TZA	उप-सहारा अफ्रीका
+27	Sub-Saharan Africa	ZMB	उप-सहारा अफ्रीका
+28	Sub-Saharan Africa	ZWE	उप-सहारा अफ्रीका
+29	Sub-Saharan Africa	AGO	उप-सहारा अफ्रीका
+30	Sub-Saharan Africa	CMR	उप-सहारा अफ्रीका
+31	Sub-Saharan Africa	CAF	उप-सहारा अफ्रीका
+32	Sub-Saharan Africa	TCD	उप-सहारा अफ्रीका
+33	Sub-Saharan Africa	COG	उप-सहारा अफ्रीका
+34	Sub-Saharan Africa	COD	उप-सहारा अफ्रीका
+35	Sub-Saharan Africa	GNQ	उप-सहारा अफ्रीका
+36	Sub-Saharan Africa	GAB	उप-सहारा अफ्रीका
+37	Sub-Saharan Africa	STP	उप-सहारा अफ्रीका
+38	Sub-Saharan Africa	BWA	उप-सहारा अफ्रीका
+39	Sub-Saharan Africa	SWZ	उप-सहारा अफ्रीका
+40	Sub-Saharan Africa	LSO	उप-सहारा अफ्रीका
+41	Sub-Saharan Africa	NAM	उप-सहारा अफ्रीका
+42	Sub-Saharan Africa	ZAF	उप-सहारा अफ्रीका
+43	Sub-Saharan Africa	BEN	उप-सहारा अफ्रीका
+44	Sub-Saharan Africa	BFA	उप-सहारा अफ्रीका
+45	Sub-Saharan Africa	CPV	उप-सहारा अफ्रीका
+46	Sub-Saharan Africa	CIV	उप-सहारा अफ्रीका
+47	Sub-Saharan Africa	GMB	उप-सहारा अफ्रीका
+48	Sub-Saharan Africa	GHA	उप-सहारा अफ्रीका
+49	Sub-Saharan Africa	GIN	उप-सहारा अफ्रीका
+50	Sub-Saharan Africa	GNB	उप-सहारा अफ्रीका
+51	Sub-Saharan Africa	LBR	उप-सहारा अफ्रीका
+52	Sub-Saharan Africa	MLI	उप-सहारा अफ्रीका
+53	Sub-Saharan Africa	MRT	उप-सहारा अफ्रीका
+54	Sub-Saharan Africa	NER	उप-सहारा अफ्रीका
+55	Sub-Saharan Africa	NGA	उप-सहारा अफ्रीका
+56	Sub-Saharan Africa	SHN	उप-सहारा अफ्रीका
+57	Sub-Saharan Africa	SEN	उप-सहारा अफ्रीका
+58	Sub-Saharan Africa	SLE	उप-सहारा अफ्रीका
+59	Sub-Saharan Africa	TGO	उप-सहारा अफ्रीका
+80	Latin America and the Caribbean	KNA	लैटिन अमेरिका और कैरेबियना
+81	Latin America and the Caribbean	LCA	लैटिन अमेरिका और कैरेबियना
+82	Latin America and the Caribbean	MAF	लैटिन अमेरिका और कैरेबियना
+83	Latin America and the Caribbean	VCT	लैटिन अमेरिका और कैरेबियना
+84	Latin America and the Caribbean	SXM	लैटिन अमेरिका और कैरेबियना
+85	Latin America and the Caribbean	TTO	लैटिन अमेरिका और कैरेबियना
+86	Latin America and the Caribbean	TCA	लैटिन अमेरिका और कैरेबियना
+87	Latin America and the Caribbean	VIR	लैटिन अमेरिका और कैरेबियना
+88	Latin America and the Caribbean	BLZ	लैटिन अमेरिका और कैरेबियना
+89	Latin America and the Caribbean	CRI	लैटिन अमेरिका और कैरेबियना
+90	Latin America and the Caribbean	SLV	लैटिन अमेरिका और कैरेबियना
+91	Latin America and the Caribbean	GTM	लैटिन अमेरिका और कैरेबियना
+92	Latin America and the Caribbean	HND	लैटिन अमेरिका और कैरेबियना
+93	Latin America and the Caribbean	MEX	लैटिन अमेरिका और कैरेबियना
+94	Latin America and the Caribbean	NIC	लैटिन अमेरिका और कैरेबियना
+95	Latin America and the Caribbean	PAN	लैटिन अमेरिका और कैरेबियना
+96	Latin America and the Caribbean	ARG	लैटिन अमेरिका और कैरेबियना
+97	Latin America and the Caribbean	BOL	लैटिन अमेरिका और कैरेबियना
+98	Latin America and the Caribbean	BVT	लैटिन अमेरिका और कैरेबियना
+99	Latin America and the Caribbean	BRA	लैटिन अमेरिका और कैरेबियना
+100	Latin America and the Caribbean	CHL	लैटिन अमेरिका और कैरेबियना
+101	Latin America and the Caribbean	COL	लैटिन अमेरिका और कैरेबियना
+102	Latin America and the Caribbean	ECU	लैटिन अमेरिका और कैरेबियना
+103	Latin America and the Caribbean	FLK	लैटिन अमेरिका और कैरेबियना
+104	Latin America and the Caribbean	GUF	लैटिन अमेरिका और कैरेबियना
+105	Latin America and the Caribbean	GUY	लैटिन अमेरिका और कैरेबियना
+106	Latin America and the Caribbean	PRY	लैटिन अमेरिका और कैरेबियना
+107	Latin America and the Caribbean	PER	लैटिन अमेरिका और कैरेबियना
+108	Latin America and the Caribbean	SGS	लैटिन अमेरिका और कैरेबियना
+109	Latin America and the Caribbean	SUR	लैटिन अमेरिका और कैरेबियना
+110	Latin America and the Caribbean	URY	लैटिन अमेरिका और कैरेबियना
+111	Latin America and the Caribbean	VEN	लैटिन अमेरिका और कैरेबियना
+131	South-eastern Asia	IDN	दक्षिण-पूर्वी एशिया
+132	South-eastern Asia	LAO	दक्षिण-पूर्वी एशिया
+133	South-eastern Asia	MYS	दक्षिण-पूर्वी एशिया
+134	South-eastern Asia	MMR	दक्षिण-पूर्वी एशिया
+135	South-eastern Asia	PHL	दक्षिण-पूर्वी एशिया
+136	South-eastern Asia	SGP	दक्षिण-पूर्वी एशिया
+137	South-eastern Asia	THA	दक्षिण-पूर्वी एशिया
+138	South-eastern Asia	TLS	दक्षिण-पूर्वी एशिया
+139	South-eastern Asia	VNM	दक्षिण-पूर्वी एशिया
+146	Southern Asia	NPL	दक्षिणी एशिया
+147	Southern Asia	PAK	दक्षिणी एशिया
+148	Southern Asia	LKA	दक्षिणी एशिया
+153	Western Asia	GEO	पश्चिमी एशिया
+154	Western Asia	IRQ	पश्चिमी एशिया
+155	Western Asia	ISR	पश्चिमी एशिया
+156	Western Asia	JOR	पश्चिमी एशिया
+157	Western Asia	KWT	पश्चिमी एशिया
+158	Western Asia	LBN	पश्चिमी एशिया
+159	Western Asia	OMN	पश्चिमी एशिया
+160	Western Asia	QAT	पश्चिमी एशिया
+161	Western Asia	SAU	पश्चिमी एशिया
+162	Western Asia	PSE	पश्चिमी एशिया
+163	Western Asia	SYR	पश्चिमी एशिया
+164	Western Asia	TUR	पश्चिमी एशिया
+165	Western Asia	ARE	पश्चिमी एशिया
+166	Western Asia	YEM	पश्चिमी एशिया
+182	Northern Europe	FRO	उत्तरी यूरोप
+183	Northern Europe	FIN	उत्तरी यूरोप
+184	Northern Europe	ISL	उत्तरी यूरोप
+185	Northern Europe	IRL	उत्तरी यूरोप
+186	Northern Europe	IMN	उत्तरी यूरोप
+187	Northern Europe	LVA	उत्तरी यूरोप
+188	Northern Europe	LTU	उत्तरी यूरोप
+189	Northern Europe	NOR	उत्तरी यूरोप
+190	Northern Europe	SJM	उत्तरी यूरोप
+191	Northern Europe	SWE	उत्तरी यूरोप
+192	Northern Europe	GBR	उत्तरी यूरोप
+201	Southern Europe	MLT	दक्षिणी यूरोप
+202	Southern Europe	MNE	दक्षिणी यूरोप
+203	Southern Europe	MKD	दक्षिणी यूरोप
+204	Southern Europe	PRT	दक्षिणी यूरोप
+205	Southern Europe	SMR	दक्षिणी यूरोप
+206	Southern Europe	SRB	दक्षिणी यूरोप
+207	Southern Europe	SVN	दक्षिणी यूरोप
+208	Southern Europe	ESP	दक्षिणी यूरोप
+221	Australia and New Zealand	HMD	ऑस्ट्रेलिया और न्यूजीलैंड
+222	Australia and New Zealand	NZL	ऑस्ट्रेलिया और न्यूजीलैंड
+223	Australia and New Zealand	NFK	ऑस्ट्रेलिया और न्यूजीलैंड
+228	Melanesia	VUT	मेलानेशिया
+232	Micronesia	FSM	माइक्रोनेशिया
+233	Micronesia	NRU	माइक्रोनेशिया
+234	Micronesia	MNP	माइक्रोनेशिया
+235	Micronesia	PLW	माइक्रोनेशिया
+236	Micronesia	UMI	माइक्रोनेशिया
+242	Polynesia	WSM	पोलीनेशियाा
+243	Polynesia	TKL	पोलीनेशियाा
+244	Polynesia	TON	पोलीनेशियाा
+245	Polynesia	TUV	पोलीनेशियाा
+246	Polynesia	WLF	पोलीनेशियाा
 \.
 
 
@@ -7756,30 +7786,30 @@ COPY public.subregions (id, subregion, iso3) FROM stdin;
 -- Data for Name: syndrome; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.syndrome (id, syndrome, active, last_updated) FROM stdin;
-1	Haemorrhagic Fever	1	2023-08-14 08:43:59
-2	Acute Flaccid Paralysis	1	2023-08-14 08:43:59
-3	Acute gastroenteritis	1	2023-08-14 08:43:59
-4	severe acute respiratory syndrome	1	2023-08-14 08:43:59
-5	Influenza-like illness	1	2023-08-14 08:43:59
-6	Acute fever and rash	1	2023-08-14 08:43:59
-7	Febrile syndromes	1	2023-08-14 08:43:59
-8	Encephalitis 	1	2023-08-14 08:43:59
-9	Meningitis	1	2023-08-14 08:43:59
-10	pneumonia	1	2023-08-14 08:43:59
-11	other paralysis	1	2023-08-14 08:43:59
-12	Fatigue	0	2023-08-14 08:43:59
-13	melioidosis	0	2023-08-14 08:43:59
-14	mucormycosis	0	2023-08-14 08:43:59
-15	PIMS-TS	1	2023-08-14 08:43:59
-16	Jaundice	1	2023-08-14 08:43:59
-17	hemolytic uremic syndrome	1	2023-08-14 08:43:59
-18	Tomato fever	1	2023-08-14 08:43:59
-19	Meningoencephalitis	0	2023-08-14 08:43:59
-20	Encephalomyelitis	0	2023-08-14 08:43:59
-21	conjunctivitis	1	2023-08-14 08:43:59
-22	Bronchiolitis	0	2023-08-14 08:43:59
-23	Bronchitis	0	2023-08-14 08:43:59
+COPY public.syndrome (id, syndrome, active, last_updated, hindi_translation, colour) FROM stdin;
+1	Haemorrhagic Fever	1	2023-08-14 08:43:59	रक्तस्रावी बुखार	#07a304
+2	Acute Flaccid Paralysis	1	2023-08-14 08:43:59	तीव्र झूलता हुआ शिथिल पक्षाघात	#1ace3e
+3	Acute gastroenteritis	1	2023-08-14 08:43:59	तीव्र आंत्रशोथ	#34ed87
+4	severe acute respiratory syndrome	1	2023-08-14 08:43:59	गंभीर तीव्र श्वसन सिंड्रोम	#3bbf97
+5	Influenza-like illness	1	2023-08-14 08:43:59	इंफ्लूएंजा जैसी बीमारी	#56d8cd
+6	Acute fever and rash	1	2023-08-14 08:43:59	तेज बुखार और दाने चकत्ते	#088ba5
+7	Febrile syndromes	1	2023-08-14 08:43:59	ज्वर सिंड्रोम	#1c85cc
+8	Encephalitis 	1	2023-08-14 08:43:59	दिमागी बुखार	#377aef
+9	Meningitis	1	2023-08-14 08:43:59	मस्तिष्कावरण शोथ	#2f3b93
+10	pneumonia	1	2023-08-14 08:43:59	न्यूमोनिया	#5a4cba
+11	other paralysis	1	2023-08-14 08:43:59	अन्य पक्षाघात	#4b0bba
+12	Fatigue	0	2023-08-14 08:43:59	थकान	#9221dd
+13	melioidosis	0	2023-08-14 08:43:59	मेलियोइडोसिस	#dc3cfc
+14	mucormycosis	0	2023-08-14 08:43:59	म्यूकरमायकोसिस	#d847cf
+15	PIMS-TS	1	2023-08-14 08:43:59	पीआईएमएस-टीएस	#e560b9
+16	Jaundice	1	2023-08-14 08:43:59	पीलिया	#ce0e61
+17	hemolytic uremic syndrome	1	2023-08-14 08:43:59	हीमोलाइटिक यूरीमिक सिंड्रोम	#ea254c
+18	Tomato fever	1	2023-08-14 08:43:59	टमाटर बुखार	#a82e2a
+19	Meningoencephalitis	0	2023-08-14 08:43:59	मेनिंगोएन्सेफलाइटिस	#cc6b45
+20	Encephalomyelitis	0	2023-08-14 08:43:59	इंसेफेलोमाइलाइटिस	#eaa764
+21	conjunctivitis	1	2023-08-14 08:43:59	कंजंक्टिवाइटिस	#e5b412
+22	Bronchiolitis	0	2023-08-14 08:43:59	ब्रोंकियोलाइटिस	#f9f92a
+23	Bronchitis	0	2023-08-14 08:43:59	ब्रोंकाइटिस	#9cba30
 \.
 
 
@@ -7808,19 +7838,11 @@ ALTER TABLE ONLY public.country_data
 
 
 --
--- Name: disease disease_disease_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: disease disease_colour_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.disease
-    ADD CONSTRAINT disease_disease_key UNIQUE (disease);
-
-
---
--- Name: disease disease_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.disease
-    ADD CONSTRAINT disease_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT disease_colour_key UNIQUE (colour);
 
 
 --
@@ -7917,6 +7939,30 @@ ALTER TABLE ONLY public.report
 
 ALTER TABLE ONLY public.subregions
     ADD CONSTRAINT subregions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: syndrome syndrome_colour_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.syndrome
+    ADD CONSTRAINT syndrome_colour_key UNIQUE (colour);
+
+
+--
+-- Name: syndrome syndrome_colour_key1; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.syndrome
+    ADD CONSTRAINT syndrome_colour_key1 UNIQUE (colour);
+
+
+--
+-- Name: syndrome syndrome_colour_key2; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.syndrome
+    ADD CONSTRAINT syndrome_colour_key2 UNIQUE (colour);
 
 
 --

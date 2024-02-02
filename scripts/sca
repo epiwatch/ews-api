@@ -1,8 +1,0 @@
-#!/bin/bash
-SRC="$1"
-[[ -z $1 ]] && SRC="app"
-set -x
-ruff check --fix "$SRC"
-isort "$SRC"
-black "$SRC"
-mypy "$SRC"

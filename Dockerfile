@@ -66,8 +66,6 @@ COPY requirements.txt /tmp/requirements.txt
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
-COPY .env /code/.env
-
 # Copy the current directory contents into the container at /code
 COPY ./app /code/app
 
