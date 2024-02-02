@@ -38,9 +38,7 @@ def get_settings(request: Request):
 
 logger.debug("Loaded settings: " + str(dir(settings)))
 
-
 databaseEngine = {}
-
 
 @asynccontextmanager
 async def dbEngine(app: FastAPI):
@@ -99,13 +97,11 @@ if settings.WEBSITE_CORS_ALLOWED_ORIGINS:
         max_age=15,
     )
 
-
 # ==========================TEST SERVER CONNECTION==========================
 @app.get("/api/v2/healthz", status_code=status.HTTP_200_OK)
 async def test_api_connection(response: Response):
     response.status_code = status.HTTP_200_OK
     return {"STATUS": response.status_code}
-
 
 logger.info("Loading static router")
 app.include_router(v2_static.router, prefix="/api/v2",dependencies=[Depends(get_settings), Depends(get_db)])
