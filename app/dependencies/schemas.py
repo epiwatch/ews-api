@@ -12,7 +12,7 @@ class DiseaseOutput(BaseModel):
     colour: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class StaticInput(BaseModel):
@@ -25,11 +25,11 @@ class SyndromeOutput(BaseModel):
     colour: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CountryEndpointOutput(BaseModel):
-    id: str
+    id: int
     iso3: str
     country_name: str
     lat: float
@@ -38,7 +38,7 @@ class CountryEndpointOutput(BaseModel):
     region: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # ================================= Datasets ==================================================
@@ -50,7 +50,14 @@ class DatasetOutput(BaseModel):
     date: date
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class InsertArticleInput(BaseModel):
+    title: str
+    date: str
+    body: str
+    url: str
 
 
 class Stats_Params:
@@ -84,7 +91,7 @@ class TopTenDiseaseOutput(BaseModel):
     num: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class reportIllnessInCountryOutput(BaseModel):
@@ -92,7 +99,7 @@ class reportIllnessInCountryOutput(BaseModel):
     count: int | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class reportIllnessInLocation(BaseModel):
@@ -144,7 +151,7 @@ class CountryOutput(BaseModel):
     region: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class countryReportEntry(BaseModel):
@@ -153,7 +160,7 @@ class countryReportEntry(BaseModel):
     url: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class countryReportOutput(BaseModel):
@@ -168,7 +175,7 @@ class NumReportsPerCountry(BaseModel):
     report_count: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class MapEndpointInput:

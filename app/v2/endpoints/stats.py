@@ -32,12 +32,9 @@ def get_top_10_diseases(country_id: int, start_date: str, end_date: str, request
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-# old name reportDiseasesInRange
 @router.get("/reportIllnessesInRange", tags=["Stats page - Gets"], status_code=status.HTTP_200_OK)
 def statsbarchart(stats_input: Annotated[Stats_Params, Depends(Stats_Params)], request: Request, response: Response):
-    """
-    ## STACKED BAR CHART
-    """
+    """ """
     try:
         with request.state.sessionmaker() as current_session:
             db = Database(current_session)
@@ -60,7 +57,7 @@ def statsbarchart(stats_input: Annotated[Stats_Params, Depends(Stats_Params)], r
 @router.get("/reportIllnessInCountry", tags=["Stats page - Gets"], status_code=status.HTTP_200_OK)
 async def country_pie_chart(stats_input: Annotated[Stats_Params, Depends(Stats_Params)], request: Request, response: Response):
     """
-    ## COUNTRY PIE CHART
+
     ReportIllnessInLocation -- count per illness per country
     """
     try:

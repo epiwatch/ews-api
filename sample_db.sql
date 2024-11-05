@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.17 (Ubuntu 12.17-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.17 (Ubuntu 12.17-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 15.8 (Ubuntu 15.8-1.pgdg20.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,9 +16,196 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: article; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.article (
+    id integer NOT NULL,
+    reviewed integer DEFAULT 0 NOT NULL,
+    audited integer DEFAULT 0 NOT NULL,
+    flagged integer DEFAULT 0 NOT NULL,
+    accepted integer DEFAULT 0 NOT NULL,
+    blocked integer DEFAULT 0 NOT NULL,
+    skipped integer DEFAULT 0 NOT NULL,
+    language_detection_method_id integer,
+    language_code character varying(15) DEFAULT NULL::character varying,
+    language_name character varying(100) DEFAULT NULL::character varying,
+    priority_score double precision,
+    priority_method character varying(100) DEFAULT NULL::character varying,
+    unique_hash character varying(64) NOT NULL,
+    hashed_value character varying(2000) NOT NULL,
+    flag_comments text,
+    original_priority_score double precision,
+    suggested_priority_score double precision
+);
+
+
+--
+-- Name: article_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.article_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: article_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.article_id_seq OWNED BY public.article.id;
+
+
+--
+-- Name: article_reviewdata_field; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.article_reviewdata_field (
+    id integer NOT NULL,
+    enable_nlp smallint NOT NULL,
+    enable_translation smallint NOT NULL,
+    content_html_id integer,
+    name character varying(100) NOT NULL,
+    description character varying(512) NOT NULL
+);
+
+
+--
+-- Name: article_reviewdata_field_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.article_reviewdata_field_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: article_reviewdata_field_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.article_reviewdata_field_id_seq OWNED BY public.article_reviewdata_field.id;
+
+
+--
+-- Name: article_reviewdata_point; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.article_reviewdata_point (
+    id integer NOT NULL,
+    article_id integer,
+    article_reviewdata_field_id integer,
+    translation_status_id integer,
+    value character varying NOT NULL,
+    value_with_nlp character varying,
+    value_original_language character varying,
+    extra character varying
+);
+
+
+--
+-- Name: article_reviewdata_point_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.article_reviewdata_point_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: article_reviewdata_point_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.article_reviewdata_point_id_seq OWNED BY public.article_reviewdata_point.id;
+
+
+--
+-- Name: article_reviewdata_point_nlp; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.article_reviewdata_point_nlp (
+    id integer NOT NULL,
+    article_reviewdata_point_id integer,
+    nlp_index integer NOT NULL,
+    display_text character varying NOT NULL,
+    value character varying NOT NULL,
+    category character varying(10) NOT NULL
+);
+
+
+--
+-- Name: article_reviewdata_point_nlp_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.article_reviewdata_point_nlp_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: article_reviewdata_point_nlp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.article_reviewdata_point_nlp_id_seq OWNED BY public.article_reviewdata_point_nlp.id;
+
+
+--
+-- Name: article_trace; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.article_trace (
+    id integer NOT NULL,
+    article_id integer NOT NULL,
+    collection_process_execution_log_id integer NOT NULL
+);
+
+
+--
+-- Name: article_trace_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.article_trace_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: article_trace_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.article_trace_id_seq OWNED BY public.article_trace.id;
+
 
 --
 -- Name: colours_api; Type: TABLE; Schema: public; Owner: -
@@ -28,8 +215,6 @@ CREATE TABLE public.colours_api (
     id integer NOT NULL,
     color_hex character varying(16)
 );
-
-
 
 
 --
@@ -48,8 +233,6 @@ CREATE TABLE public.country_data (
 );
 
 
-
-
 --
 -- Name: disease; Type: TABLE; Schema: public; Owner: -
 --
@@ -62,8 +245,6 @@ CREATE TABLE public.disease (
     hindi_translation character varying(255),
     colour character varying(32)
 );
-
-
 
 
 --
@@ -101,7 +282,6 @@ CREATE TABLE public.report_data_field (
 );
 
 
-
 --
 -- Name: report_data_field_type; Type: TABLE; Schema: public; Owner: -
 --
@@ -114,7 +294,6 @@ CREATE TABLE public.report_data_field_type (
 );
 
 
-
 --
 -- Name: report_data_point; Type: TABLE; Schema: public; Owner: -
 --
@@ -125,7 +304,6 @@ CREATE TABLE public.report_data_point (
     report_data_field_id integer,
     value character varying NOT NULL
 );
-
 
 
 --
@@ -157,7 +335,6 @@ CREATE TABLE public.report_data_point_location (
 );
 
 
-
 --
 -- Name: report_data_point_syndrome; Type: TABLE; Schema: public; Owner: -
 --
@@ -181,7 +358,6 @@ CREATE TABLE public.subregions (
 );
 
 
-
 --
 -- Name: syndrome; Type: TABLE; Schema: public; Owner: -
 --
@@ -196,6 +372,84 @@ CREATE TABLE public.syndrome (
 );
 
 
+--
+-- Name: article id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article ALTER COLUMN id SET DEFAULT nextval('public.article_id_seq'::regclass);
+
+
+--
+-- Name: article_reviewdata_field id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_reviewdata_field ALTER COLUMN id SET DEFAULT nextval('public.article_reviewdata_field_id_seq'::regclass);
+
+
+--
+-- Name: article_reviewdata_point id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_reviewdata_point ALTER COLUMN id SET DEFAULT nextval('public.article_reviewdata_point_id_seq'::regclass);
+
+
+--
+-- Name: article_reviewdata_point_nlp id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_reviewdata_point_nlp ALTER COLUMN id SET DEFAULT nextval('public.article_reviewdata_point_nlp_id_seq'::regclass);
+
+
+--
+-- Name: article_trace id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_trace ALTER COLUMN id SET DEFAULT nextval('public.article_trace_id_seq'::regclass);
+
+
+--
+-- Data for Name: article; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.article (id, reviewed, audited, flagged, accepted, blocked, skipped, language_detection_method_id, language_code, language_name, priority_score, priority_method, unique_hash, hashed_value, flag_comments, original_priority_score, suggested_priority_score) FROM stdin;
+\.
+
+
+--
+-- Data for Name: article_reviewdata_field; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.article_reviewdata_field (id, enable_nlp, enable_translation, content_html_id, name, description) FROM stdin;
+1	0	0	1	url	The url to an article
+2	1	1	2	title	The title of an article
+3	1	1	3	body-text	The main content of an article
+4	1	1	2	publication-date	The publication date of an article
+5	1	1	3	summary-text	A short summary of an article
+\.
+
+
+--
+-- Data for Name: article_reviewdata_point; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.article_reviewdata_point (id, article_id, article_reviewdata_field_id, translation_status_id, value, value_with_nlp, value_original_language, extra) FROM stdin;
+\.
+
+
+--
+-- Data for Name: article_reviewdata_point_nlp; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.article_reviewdata_point_nlp (id, article_reviewdata_point_id, nlp_index, display_text, value, category) FROM stdin;
+\.
+
+
+--
+-- Data for Name: article_trace; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.article_trace (id, article_id, collection_process_execution_log_id) FROM stdin;
+\.
 
 
 --
@@ -961,205 +1215,61 @@ COPY public.disease (id, disease, active, last_updated, hindi_translation, colou
 8	chikungunya	1	2023-08-14 08:43:59	चिकनगुनिया	#601d91
 9	cholera	1	2023-08-14 08:43:59	हैज़ा	#c040dd
 10	covid19	1	2023-08-14 08:43:59	कोविड 19	#ea59e0
-11	cryptococcosis	1	2023-08-14 08:43:59	क्रिप्टोकोकोसिस	#ed04a7
-13	crimean-congo haemorrhagic fever	1	2023-08-14 08:43:59	क्रीमियन कांगो रक्तस्रावी बुखार	#ad2442
 14	dengue	1	2023-08-14 08:43:59	डेंगू	#d1413e
-15	diphtheria	1	2023-08-14 08:43:59	डिप्थीरिया	#e87d5a
 16	ebola haemorrhagic fever	1	2023-08-14 08:43:59	इबोला रक्तस्रावी बुखार	#f28807
-17	ehec (e.coli)	1	2023-08-14 08:43:59	एंटरोहेमोरेजिक एस्चेरिचिया कोलाई	#b58d17
-18	enterovirus 71 infection	1	2023-08-14 08:43:59	एंटरोवायरस 71 संक्रमण	#ddda30
-19	influenza a/h5n1	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन1	#bfdd44
-20	influenza a/h7n9	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच7एन9	#acef5f
-21	influenza a/h9n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच9एन2	#47f209
-22	influenza a/h1n1	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच1एन1	#209b15
-24	influenza a/h3n5	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच3एन5	#48e286
-25	influenza a/h3n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच3एन2	#63f2c0
-26	influenza a/h2n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच2एन2	#0cfcec
-27	hand, foot and mouth disease	1	2023-08-14 08:43:59	हाथ, पैर और मुंह का रोग	#147987
-28	hantavirus	1	2023-08-14 08:43:59	हैंटावायरस	#2a81af
 29	hepatitis a	1	2023-08-14 08:43:59	हेपेटाइटिस ए	#457cd3
 30	hepatitis b	1	2023-08-14 08:43:59	हेपेटाइटिस बी	#6479ef
-31	hepatitis c	1	2023-08-14 08:43:59	हेपेटाइटिस सी	#0e0668
-32	hepatitis d	1	2023-08-14 08:43:59	हेपेटाइटिस डी	#4419a0
-33	hepatitis e	1	2023-08-14 08:43:59	हेपेटाइटिस इ	#8231c4
 35	hiv/aids	1	2023-08-14 08:43:59	एचआईवी/एड्स	#f96bf2
 36	lassa fever	1	2023-08-14 08:43:59	लस्सा बुखार	#c60d92
 37	malaria	1	2023-08-14 08:43:59	मलेरिया	#db257d
 38	marburg virus disease	1	2023-08-14 08:43:59	मारबर्ग वायरस की बीमारी रोग	#d8385d
 39	measles	1	2023-08-14 08:43:59	खसरा	#ef5953
 40	MERS	1	2023-08-14 08:43:59	एम ई आर एस	#cc7459
-41	mumps	1	2023-08-14 08:43:59	कण्ठमाला का रोग गलसुआ	#c1650f
 42	nipah virus	1	2023-08-14 08:43:59	निपाह वायरस	#d39f26
-43	norovirus	1	2023-08-14 08:43:59	नोरोवायरस	#efe940
 44	pertussis	1	2023-08-14 08:43:59	काली खांसी	#d2f759
 45	plague	1	2023-08-14 08:43:59	प्लेग	#a5d660
 47	poliomyelitis	1	2023-08-14 08:43:59	पोलियो	#35ce27
 48	q fever	1	2023-08-14 08:43:59	क्यू बुखार	#41ea5b
 49	rabies	1	2023-08-14 08:43:59	रेबीज	#5cf9a3
-50	rift valley fever	1	2023-08-14 08:43:59	रिफ्ट वैली बुखार	#017f4f
 51	rotavirus infection	1	2023-08-14 08:43:59	रोटावायरस संक्रमण	#11ad9b
 52	rubella	1	2023-08-14 08:43:59	रूबेला	#26b2c1
 53	salmonellosis	1	2023-08-14 08:43:59	साल्मोनेलोसिस	#42ace5
-54	SARS-CoV-1	1	2023-08-14 08:43:59	सार्स सीओवी कोवी1	#395996
 55	shigellosis	1	2023-08-14 08:43:59	शिगेलोसिस	#02197f
 56	smallpox	1	2023-08-14 08:43:59	चेचक	#1c12a8
 58	typhoid fever	1	2023-08-14 08:43:59	टाइफाइड टाइफायड बुखार	#a147ef
 59	tuberculosis	1	2023-08-14 08:43:59	क्षय रोग	#bc54d8
 60	tularemia	1	2023-08-14 08:43:59	टुलरेमिया	#ce06c7
-61	vaccinia	1	2023-08-14 08:43:59	वैक्सीनिया	#e01aab
-62	varicella	1	2023-08-14 08:43:59	वेरिसेला	#ef3492
 63	west nile virus	1	2023-08-14 08:43:59	वेस्ट नील वायरस	#f94d7b
 64	yellow fever	1	2023-08-14 08:43:59	पीला बुखार	#db57ba
-65	yersiniosis	1	2023-08-14 08:43:59	यर्सिनिओसिस	#b22f07
-66	zika	1	2023-08-14 08:43:59	जीका	#dd761c
 67	legionnaires	1	2023-08-14 08:43:59	लीजियोनेयर्स	#efc137
-68	listeriosis	1	2023-08-14 08:43:59	लिस्टेरियोसिस	#d6cc44
 69	monkeypox	1	2023-08-14 08:43:59	मंकीपॉक्स	#c1d858
 71	influenza	1	2023-08-14 08:43:59	इंफ्लुएंजा	#5cd81e
-72	influenza a/h5n8	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन8	#44f43a
 73	avian influenza/unspecified	1	2023-08-14 08:43:59	अनिर्दिष्ट एवियन इन्फ्लूएंजा	#41c651
-74	influenza a/h5n6	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन6	#5ddd8e
-75	pneumonia of unknown origin	0	2023-11-23 15:10:53	अज्ञात उत्पत्ति का निमोनिया	#0bbc75
-76	hepatitis (unspecified)	1	2023-08-14 08:43:59	हेपेटाइटिस (अनिर्दिष्ट)	#22e2c2
-77	influenza/h5n5	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन5	#3ddbf7
-78	influenza/h5n3	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन3	#367da0
 80	E Coli	1	2023-08-14 08:43:59	ई कोलाई	#0d30bf
-81	influenza b	1	2023-08-14 08:43:59	इंफ्लुएंजा बी	#2a24e2
 82	Staphylococcus	1	2023-08-14 08:43:59	स्टैफिलोकोकस	#492591
-83	Encephalitis	1	2023-08-14 08:43:59	इंसेफेलाइटिस	#7c3fb5
-84	influenza a/h3n8	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच3एन8	#c966e8
-85	Lloviu	1	2023-08-14 08:43:59	ल्वोवियू	#e812e8
 86	leptospirosis	1	2023-08-14 08:43:59	लेप्टोस्पायरोसिस	#f72ac4
-88	enterovirus D68	1	2023-08-14 08:43:59	एंटरोवायरस डीd68	#d34c72
-89	Echovirus	1	2023-08-14 08:43:59	इकोवायरस	#e8686e
-90	Creutzfeldt-Jakob disease	1	2023-08-14 08:43:59	क्रूट्जफेल्डट-जाकोब रोग	#e04014
 91	Ross River Fever	1	2023-08-14 08:43:59	रॉस नदी रिवर बुखार	#fc8a2d
-92	Barmah Forest virus infection	1	2023-08-14 08:43:59	बरमाह वन वायरस संक्रमण	#bf9335
 93	Syphilis	1	2023-08-14 08:43:59	सिफलिस	#e8d955
 94	respiratory syncytial virus	1	2023-08-14 08:43:59	रेस्पिरेटरी सिंकाइटियल वायरस	#a7c401
-95	Naegleria fowleri	1	2023-08-14 08:43:59	नेगलेरिया फ्यूलेरी	#8de817
 96	Tetanus	1	2023-08-14 08:43:59	टेटनस	#4fa31f
-97	Ehrlichiosis	1	2023-08-14 08:43:59	एहर्लिचियोसिस	#4ccc3b
 98	Melioidosis	1	2023-08-14 08:43:59	मेलियोइडोसिस	#56e264
-99	Nalleria Virus	0	2023-08-14 08:43:59	नलेरिया वायरस	#04d14f
 101	campylobacteriosis	1	2023-08-14 08:43:59	कम्प्य्लोबक्तेरिओसिस	#22ad93
-102	orthopox virus	1	2023-08-14 08:43:59	ऑर्थोपॉक्स वायरस	#34a3ad
-103	Argentine hemorrhagic fever	1	2023-08-14 08:43:59	अर्जेंटीना रक्तस्रावी बुखार	#50a8ce
 104	Scrub typhus	1	2023-08-14 08:43:59	स्क्रब टाइफस	#0665d8
-105	trichinellosis 	1	2023-08-14 08:43:59	ट्राइचिनेलोसिस	#1d42f9
-106	sheeppox	1	2023-08-14 08:43:59	शीपपॉक्स	#1f1d8c
-108	dirofilariasis	1	2023-08-14 08:43:59	डायरोफिलेरियासिस	#9b57db
-109	scabies	1	2023-08-14 08:43:59	खाज-खुजली (स्केबीज)	#b809f2
-110	lyme disease	1	2023-08-14 08:43:59	लाइम रोग	#c119c4
-111	rocky mountain spotted fever	1	2023-08-14 08:43:59	रॉकी पहाड़ माउंटेन स्पॉटेड बुखार	#d82fb4
-112	Dabie bandavirus	1	2023-08-14 08:43:59	डाबी बैंडावायरस	#e5499f
-113	cyclosporiasis	1	2023-08-14 08:43:59	साइक्लोस्पोरियासिस	#ed618b
-114	burkholderia cepacia complex	1	2023-08-14 08:43:59	बुर्कहोल्डरिया सेपसिया कॉम्प्लेक्स	#f40c17
-115	mucormycosis	1	2023-08-14 08:43:59	म्यूकोमायकोसिस     म्यूकरमायकोसिस	#9e2f16
-116	alaskapox	1	2023-08-14 08:43:59	अलास्कापॉक्स	#cc702e
-117	mad cow disease	1	2023-08-14 08:43:59	पागल गाय की बीमारी मैड काऊ रोग	#e0ae4a
-118	psittacosis	1	2023-08-14 08:43:59	साइटाकोसिस	#f7ed67
-119	Eastern Equine Encephalitis 	1	2023-08-14 08:43:59	पूर्वी इक्वीन इंसेफेलाइटिस	#dcfc0f
 120	Japanese Encephalitis	1	2023-08-14 08:43:59	जापानी मस्तिष्ककोप	#6fa518
-121	St. Louis encephalitis	1	2023-08-14 08:43:59	सेंट लुइस इंसेफेलाइटिस	#70ce31
-122	Newcastle disease	1	2023-08-14 08:43:59	न्यूकैसल बीमारी रोग	#63e84e
-124	Candida 	1	2023-08-14 08:43:59	कैंडिडा	#087f2e
 125	Kyasanur forest disease	1	2023-08-14 08:43:59	कयासनूर वन रोग	#1cb271
 126	Streptococcus suis	1	2023-08-14 08:43:59	स्ट्रेप्टोकोकस सूइस	#35d6b8
-127	Jingmen tick virus	1	2023-08-14 08:43:59	जिंगमेन टिक वायरस	#4dd6dd
-128	parvovirus	1	2023-08-14 08:43:59	परोवोवायरस पार्वोवायरस	#6cc6f7
-129	Hendra virus	1	2023-08-14 08:43:59	हेंद्रा वायरस	#093e77
 131	meningococcal	1	2023-08-14 08:43:59	मेनिंगोकोकल	#3333c6
 132	Murray Valley Encephalitis	1	2023-08-14 08:43:59	मरे घाटी इंसेफेलाइटिस	#7752e5
-133	influenza/h5n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच5एन2	#804caa
-135	Hansen's disease	1	2023-08-14 08:43:59	कुष्ठ रोग	#da28e0
-136	heartland virus	1	2023-08-14 08:43:59	हार्टलैंड वायरस	#ed40ca
-137	Akhmeta virus	1	2023-08-14 08:43:59	अखमेटा वायरस	#f75bb3
-138	Lumpy skin disease	1	2023-08-14 08:43:59	गांठदार त्वचा रोग	#89012c
-139	adenovirus	1	2023-08-14 08:43:59	एडिनोवायरस	#ad111b
-140	amoeba	1	2023-08-14 08:43:59	अमीबा	#cc4226
-141	Karshi virus	1	2023-08-14 08:43:59	कार्शी वायरस	#e88543
 143	gonorrhea	1	2023-08-14 08:43:59	गोनोरिया	#c9af04
-144	necrotizing fasciitis	1	2023-08-14 08:43:59	नेक्रोटाइजिंग फेसिसाइटिस फेशिआइटिस	#9daf13
-145	babesiosis	1	2023-08-14 08:43:59	बेब्सियोसिस	#97d62a
 146	buruli ulcer	1	2023-08-14 08:43:59	बुरुली अल्सर	#82ef47
-147	herpes simplex virus	1	2023-08-14 08:43:59	हरपीज सिंप्लेक्स वायरस	#66cc4f
-148	herpes b virus	1	2023-08-14 08:43:59	हरपीज बी वायरस	#048e0f
-149	sapovirus	1	2023-08-14 08:43:59	सैपोवायरस	#16ba47
-150	echinococcosis	1	2023-08-14 08:43:59	इचिनोकोकोसिस	#2fe090
 1	unknown	1	2023-08-14 08:43:59	अनजान	#6aede0
 3	anthrax/cutaneous	1	2023-08-14 08:43:59	त्वचीय एंथ्रेक्स	#164c75
 12	cryptosporidiosis	1	2023-08-14 08:43:59	क्रिप्टोस्पोरिडियोसिस	#fc1e82
-23	influenza a/h1n2	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच1एन2	#2dc649
-34	histoplasmosis	1	2023-08-14 08:43:59	हिस्टोप्लाज्मोसिस	#d252f2
 46	pneumococcus pneumonia	1	2023-08-14 08:43:59	न्यूमोकोकस निमोनिया	#40a30e
-57	staphylococcal enterotoxin b	1	2023-08-14 08:43:59	स्टैफिलोकोकल एंटरोटॉक्सिन बी	#5e2cd3
-70	leishmaniasis	1	2023-08-14 08:43:59	लीशमैनियासिस काला अजार	#6eb208
 79	anthrax/unspecified	1	2023-08-14 08:43:59	अनिर्दिष्ट एंथ्रेक्स	#5586c6
-87	African Swine Fever	1	2023-08-14 08:43:59	अफ्रीकी स्वाइन बुखार	#d33988
-100	Powassan Virus infection	1	2023-08-14 08:43:59	पोवासन वायरस संक्रमण	#1af2a3
-107	Jamestown Canyon virus infection	1	2023-08-14 08:43:59	जेम्सटाउन घाटी वायरस संक्रमण	#5838b7
-123	pseudomonas aeruginosa	1	2023-08-14 08:43:59	स्यूडोमोनास एरुगिनोसा	#6af77d
-134	cronobacter	0	2023-08-14 08:43:59	डाबी बैंडावायरस/ क्रोनोबैक्टर	#9712cc
-151	Rickettsia conorii 	1	2023-08-14 08:43:59	रिकेट्सिया कोनोरी	#4bf4db
-153	oropouche fever	1	2023-08-14 08:43:59	ओरोपोचे बुखार	#05668c
-154	bornavirus	1	2023-08-14 08:43:59	बोर्नावायरस	#1766b5
-155	Chapare hemorrhagic fever	1	2023-08-14 08:43:59	चपारे रक्तस्रावी बुखार	#2f5cd8
-156	vibriosis	1	2023-08-14 08:43:59	विब्रियोसिस	#544ff7
-157	influenza a/h7n3	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच7एन3	#5d46aa
-158	acinetobacter 	1	2023-08-14 08:43:59	एसिनेटोबैक्टर	#5008a3
-159	parechovirus	1	2023-08-14 08:43:59	पारेकोवायरस	#931bc6
-161	foot and mouth disease	1	2023-08-14 08:43:59	पैर और मुंह का रोग	#d345b9
-162	Influenza A	1	2023-08-14 08:43:59	इंफ्लुएंजा ए	#dd5da8
-163	anaplasmosis	1	2023-08-14 08:43:59	एनाप्लाज्मोसिस	#bc0b46
-164	Powassan virus	0	2023-08-14 08:43:59	पोवासन वायरस	#d82032
-165	Equine infectious anemia	1	2023-08-14 08:43:59	इक्विन संक्रामक एनीमिया	#f2553a
-166	Rat Bite Fever	1	2023-08-14 08:43:59	चूहे के काटने का बुखार	#c67543
-168	sarbecovirus (unspecified)	1	2023-08-14 08:43:59	सार्बेकोवायरस (अनिर्दिष्ट)	#e2c30f
-169	Streptobacillus moniliformis	0	2023-08-14 08:43:59	स्ट्रेप्टोबैसिलस मोनिलिफॉर्मिस	#c6e224
-170	entamoeba moshkovskii	1	2023-08-14 08:43:59	खरगोश बुखार	#b8f93e
-171	Langya Virus	1	2023-08-14 08:43:59	लंग्या वायरस	#80ce48
-172	Usutu Virus	1	2023-08-14 08:43:59	उसुतु वायरस	#7de263
-174	Human metapneumovirus 	1	2023-08-14 08:43:59	मानव मेटान्यूमोवायरस	#27ea68
-175	Herpangina	1	2023-08-14 08:43:59	हर्पंगीना हरपंजैना	#2fb576
-176	Whipple disease	1	2023-08-14 08:43:59	व्हिपल की बीमारी रोग	#4cd3b6
 177	Group A Streptococcus	1	2023-08-14 08:43:59	ग्रुप ए स्ट्रेप्टोकोकस	#5ed1d1
-178	Rhinovirus	1	2023-08-14 08:43:59	राइनोवायरस	#12a0cc
-179	goatpox	1	2023-08-14 08:43:59	बकरीपॉक्स	#2a85ed
-180	mycoplasma genitalium	1	2023-08-14 08:43:59	मायकोबैक्टर	#25428c
-181	influenza a/h10n3	1	2023-08-14 08:43:59	इंफ्लुएंजा ए/एच10एन3	#4246b5
-182	simian virus	1	2023-08-14 08:43:59	सिमियन वायरस	#2501b2
-183	onchocerciasis	1	2023-08-14 08:43:59	ओंकोसेरसियासिस	#6e15db
-184	African Trypanosomiasis	1	2023-08-14 08:43:59	अफ्रीकी ट्रिपैनोसोमियासिस	#c52ffc
-185	Serratia marcescens	1	2023-08-14 08:43:59	सेराटिया मार्सेसेंस	#c93bd6
-186	African tick bite fever	1	2023-08-14 08:43:59	अफ्रीकी टिक काटने का बुखार	#e557d0
-187	Theileriosis	1	2023-08-14 08:43:59	थीइलेरियोसिस	#e20486
 188	Paratyphoid fever	1	2023-08-14 08:43:59	पैराटाइफाइड बुखार	#ea1962
-189	Bronchiolitis 	0	2023-08-14 08:43:59	ब्रोंकियोलाइटिस	#9b1f2d
-191	Gnathostomiasis	1	2023-08-14 08:43:59	ग्नथोस्टोमियासिस	#e88c5a
-192	Schistosomiasis	1	2023-08-14 08:43:59	शिस्टोसोमियासिस	#e58c06
-193	Filariasis	1	2023-08-14 08:43:59	फाइलेरिया	#f9d81d
-194	Illheus virus	1	2023-08-14 08:43:59	इलियस वायरस	#a4af24
-195	Trypanosoma cruzi	1	2023-08-14 08:43:59	ट्रिपानोसोमा क्रूज़ी	#a5d13e
-196	Entamoeba histolytica	1	2023-08-14 08:43:59	एंटअमीबा हिस्टोलीटिका	#99e85c
-197	mycobacter	1	2023-08-14 08:43:59	मायकोबैक्टर	#2bdb08
-198	Valley Fever	1	2023-08-14 08:43:59	घाटी बुखार	#20fc28
-199	Blastomycosis	1	2023-04-28 09:21:43	\N	#28b750
-200	influenza a/h7n2	1	2023-11-23 14:14:50	\N	#43d88d
-201	influenza a/h1n7	1	2023-11-23 14:15:41	\N	#61edcc
-202	influenza a/h13n6	1	2023-11-23 14:15:50	\N	#0bdbe2
-203	influenza a/h4n8	1	2023-11-23 14:16:02	\N	#0f5b70
-205	influenza a/h8n4	1	2023-11-23 14:16:23	\N	#3e63c1
-206	influenza a/h14n5	1	2023-11-23 14:16:43	\N	#5e64e0
-207	influenza a/h6n5	1	2023-11-23 14:16:55	\N	#460eef
-208	influenza a/h12n5	1	2023-11-23 14:17:05	\N	#46158c
-210	influenza a/h11n6	1	2023-11-23 14:17:48	\N	#da4dea
 211	mycoplasma pneumoniae	1	2023-11-23 15:12:42	\N	#f469df
-152	Rickettsia japonica	1	2023-08-14 08:43:59	रिकेट्सिया जपोनिका	#409da0
-160	enterovirus (unspecified)	1	2023-08-14 08:43:59	एंटरोवायरस, अनिर्दिष्ट	#e838f4
-173	lymphocytic choriomeningitis virus	1	2023-08-14 08:43:59	लिम्फोसाइटिक कोरियोमेनिंगाइटिस वायरस	#10c919
-190	Bronchitis 	0	2023-08-14 08:43:59	श्वासनली-शोथ/ ब्रोंकाइटिस	#c44938
-209	influenza a/h7n6	1	2023-11-23 14:17:14	\N	#832ab2
 \.
 
 
@@ -7689,6 +7799,7 @@ COPY public.subregions (id, subregion, iso3, hindi_translation) FROM stdin;
 58	Sub-Saharan Africa	SLE	उप-सहारा अफ्रीका
 59	Sub-Saharan Africa	TGO	उप-सहारा अफ्रीका
 80	Latin America and the Caribbean	KNA	लैटिन अमेरिका और कैरेबियना
+192	Northern Europe	GBR	उत्तरी यूरोप
 81	Latin America and the Caribbean	LCA	लैटिन अमेरिका और कैरेबियना
 82	Latin America and the Caribbean	MAF	लैटिन अमेरिका और कैरेबियना
 83	Latin America and the Caribbean	VCT	लैटिन अमेरिका और कैरेबियना
@@ -7756,7 +7867,6 @@ COPY public.subregions (id, subregion, iso3, hindi_translation) FROM stdin;
 189	Northern Europe	NOR	उत्तरी यूरोप
 190	Northern Europe	SJM	उत्तरी यूरोप
 191	Northern Europe	SWE	उत्तरी यूरोप
-192	Northern Europe	GBR	उत्तरी यूरोप
 201	Southern Europe	MLT	दक्षिणी यूरोप
 202	Southern Europe	MNE	दक्षिणी यूरोप
 203	Southern Europe	MKD	दक्षिणी यूरोप
@@ -7790,27 +7900,88 @@ COPY public.syndrome (id, syndrome, active, last_updated, hindi_translation, col
 1	Haemorrhagic Fever	1	2023-08-14 08:43:59	रक्तस्रावी बुखार	#07a304
 2	Acute Flaccid Paralysis	1	2023-08-14 08:43:59	तीव्र झूलता हुआ शिथिल पक्षाघात	#1ace3e
 3	Acute gastroenteritis	1	2023-08-14 08:43:59	तीव्र आंत्रशोथ	#34ed87
-4	severe acute respiratory syndrome	1	2023-08-14 08:43:59	गंभीर तीव्र श्वसन सिंड्रोम	#3bbf97
 5	Influenza-like illness	1	2023-08-14 08:43:59	इंफ्लूएंजा जैसी बीमारी	#56d8cd
 6	Acute fever and rash	1	2023-08-14 08:43:59	तेज बुखार और दाने चकत्ते	#088ba5
-7	Febrile syndromes	1	2023-08-14 08:43:59	ज्वर सिंड्रोम	#1c85cc
 8	Encephalitis 	1	2023-08-14 08:43:59	दिमागी बुखार	#377aef
 9	Meningitis	1	2023-08-14 08:43:59	मस्तिष्कावरण शोथ	#2f3b93
 10	pneumonia	1	2023-08-14 08:43:59	न्यूमोनिया	#5a4cba
-11	other paralysis	1	2023-08-14 08:43:59	अन्य पक्षाघात	#4b0bba
-12	Fatigue	0	2023-08-14 08:43:59	थकान	#9221dd
-13	melioidosis	0	2023-08-14 08:43:59	मेलियोइडोसिस	#dc3cfc
-14	mucormycosis	0	2023-08-14 08:43:59	म्यूकरमायकोसिस	#d847cf
-15	PIMS-TS	1	2023-08-14 08:43:59	पीआईएमएस-टीएस	#e560b9
 16	Jaundice	1	2023-08-14 08:43:59	पीलिया	#ce0e61
-17	hemolytic uremic syndrome	1	2023-08-14 08:43:59	हीमोलाइटिक यूरीमिक सिंड्रोम	#ea254c
-18	Tomato fever	1	2023-08-14 08:43:59	टमाटर बुखार	#a82e2a
-19	Meningoencephalitis	0	2023-08-14 08:43:59	मेनिंगोएन्सेफलाइटिस	#cc6b45
-20	Encephalomyelitis	0	2023-08-14 08:43:59	इंसेफेलोमाइलाइटिस	#eaa764
-21	conjunctivitis	1	2023-08-14 08:43:59	कंजंक्टिवाइटिस	#e5b412
-22	Bronchiolitis	0	2023-08-14 08:43:59	ब्रोंकियोलाइटिस	#f9f92a
-23	Bronchitis	0	2023-08-14 08:43:59	ब्रोंकाइटिस	#9cba30
 \.
+
+
+--
+-- Name: article_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.article_id_seq', 1, false);
+
+
+--
+-- Name: article_reviewdata_field_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.article_reviewdata_field_id_seq', 1, false);
+
+
+--
+-- Name: article_reviewdata_point_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.article_reviewdata_point_id_seq', 1, false);
+
+
+--
+-- Name: article_reviewdata_point_nlp_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.article_reviewdata_point_nlp_id_seq', 1, false);
+
+
+--
+-- Name: article_trace_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.article_trace_id_seq', 1, false);
+
+
+--
+-- Name: article article_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article
+    ADD CONSTRAINT article_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: article_reviewdata_field article_reviewdata_field_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_reviewdata_field
+    ADD CONSTRAINT article_reviewdata_field_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: article_reviewdata_point_nlp article_reviewdata_point_nlp_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_reviewdata_point_nlp
+    ADD CONSTRAINT article_reviewdata_point_nlp_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: article_reviewdata_point article_reviewdata_point_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_reviewdata_point
+    ADD CONSTRAINT article_reviewdata_point_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: article_trace article_trace_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.article_trace
+    ADD CONSTRAINT article_trace_pkey PRIMARY KEY (id);
 
 
 --

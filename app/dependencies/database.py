@@ -6,8 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from app.dependencies.settings import EpiwatchSettings
 
 
-# Load .env file -- prepare this way so we can use annotate later
-# https://fastapi.tiangolo.com/advanced/settings/
 @lru_cache()
 def get_settings():
     return EpiwatchSettings()
@@ -19,5 +17,3 @@ print(connectionString)
 
 engine = create_engine(connectionString, pool_pre_ping=True, pool_size=10, max_overflow=20)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-

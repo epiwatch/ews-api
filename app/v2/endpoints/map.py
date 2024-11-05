@@ -11,7 +11,6 @@ logger = get_logger("api")
 router = APIRouter()
 
 
-# By default, all diseases, no syndromes
 @router.get("/map", tags=["Map"], status_code=status.HTTP_200_OK, response_model=MapOutput)
 def map_data(map_input: Annotated[MapEndpointInput, Depends(MapEndpointInput)], request: Request, response: Response):
     """

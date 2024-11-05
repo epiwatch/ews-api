@@ -7,7 +7,7 @@ from sqlalchemy import URL, create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.dependencies.logger import get_logger
-from app.dependencies.settings import EpiwatchSettings
+from app.dependencies.settings import DB_WRITE_ACCESS, EpiwatchSettings
 from app.docs import VERSION, description
 from app.v2.endpoints import datasets as v2_datasets
 from app.v2.endpoints import map as v2_map
@@ -38,17 +38,16 @@ def get_settings(request: Request):
 
 logger.debug("Loaded settings: " + str(dir(settings)))
 
+
 databaseEngine = {}
+
 
 @asynccontextmanager
 async def dbEngine(app: FastAPI):
     try:
+        write_settings = DB_WRITE_ACCESS()
         database_url = URL.create(
-            "postgresql",
-            username=settings.PSQL_USERNAME,
-            password=settings.PSQL_PASSWORD,
-            host=settings.PSQL_SERVER,
-            database=settings.PSQL_DB,
+            "postgresql", username=write_settings.PSQL_USERNAME_WRITE, password=write_settings.PSQL_PASSWORD_WRITE, host=write_settings.PSQL_SERVER, database=write_settings.PSQL_DB
         )
         dbengine = create_engine(database_url, pool_pre_ping=True, pool_size=10, max_overflow=20)
         logger.debug("Adding sessionmaker to databaseEngine dictionary")
@@ -97,14 +96,16 @@ if settings.WEBSITE_CORS_ALLOWED_ORIGINS:
         max_age=15,
     )
 
+
 # ==========================TEST SERVER CONNECTION==========================
 @app.get("/api/v2/healthz", status_code=status.HTTP_200_OK)
 async def test_api_connection(response: Response):
     response.status_code = status.HTTP_200_OK
     return {"STATUS": response.status_code}
 
+
 logger.info("Loading static router")
-app.include_router(v2_static.router, prefix="/api/v2",dependencies=[Depends(get_settings), Depends(get_db)])
+app.include_router(v2_static.router, prefix="/api/v2", dependencies=[Depends(get_settings), Depends(get_db)])
 logger.info("Loading stats router")
 app.include_router(v2_stats.router, prefix="/api/v2", dependencies=[Depends(get_settings), Depends(get_db)])
 logger.info("Loading datasets router")

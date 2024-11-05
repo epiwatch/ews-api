@@ -28,7 +28,7 @@ class APIQueryBuilder:
             self.determine_disease()
             self.determine_syndrome()
             self.determine_country()
-        except:
+        except Exception:
             raise HTTPException(status_code=400, detail="Invalid language selection")
 
     def determine_disease(self):
@@ -45,7 +45,6 @@ class APIQueryBuilder:
         subregion_lang = {"hi": Subregions.hindi_translation, "en": Subregions.subregion}
         self.subregion_col = subregion_lang[self.lang]
 
-    # add colour back
     def static_get_diseases(self):
         orm_sql = select(Disease.id, self.dis_col.label("disease"), Disease.colour).select_from(Disease).where(Disease.active == 1)
         return orm_sql
@@ -248,7 +247,7 @@ class DatabaseFactory:
 
     def assign_connection(self):
         load_dotenv()
-        # for local
+
         try:
             logger.info("Using environment variables")
             server = os.environ.get("PSQL_SERVER")

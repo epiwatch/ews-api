@@ -35,7 +35,7 @@ def log_input(api_call: str, stats_input: Stats_Params) -> None:
 
 
 def get_all_isos_sbregion_orm(db: Database, country_id):
-    # get region name
+
     country_query = select(CountryData.iso3).where(CountryData.id == country_id)
     iso3 = db.session.execute(country_query).scalars().one()
     region_query = select(Subregions.subregion).where(Subregions.iso3 == iso3)
@@ -85,10 +85,9 @@ def reportIllnessInCountryORM(db: Database, start_date, end_date, diseases, synd
 
 
 def reportIllnessInCountryORMAllDiseases(db: Database, start_date, end_date, syndromes, country_id, lang):
-    # COUNTRY PIE CHART: COUNT VALUES FOR EACH DISEASES AND SYNDROME PER COUNTRY
+
     minimal_length = 9
     dis_subq = (
-        # case((lang == "hi", Disease.hindi_translation), else_=Disease.disease).label("illness"), func.count(Report.id).label("num")
         select(case((lang == "hi", Disease.hindi_translation), else_=Disease.disease).label("illness"), func.count(Report.id).label("num"))
         .select_from(Report)
         .join(ReportDataPointLocation, ReportDataPointLocation.report_id == Report.id)
@@ -162,9 +161,6 @@ def illnessInRegionORM(db: Database, start_date: str, end_date: str, country_ids
 
 def process_orm_res(result):
     return [dict(r._mapping) for r in result]
-
-
-## REVERSE EPIRISK CALCU:AOR
 
 
 def generate_report_diseases_in_range(results):

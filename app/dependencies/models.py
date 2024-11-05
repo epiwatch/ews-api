@@ -21,7 +21,6 @@ class Regions(Base):
     id = Column(Integer, primary_key=True, unique=True)
     region = Column(String(50), nullable=False)
     iso3 = Column(String(3), nullable=False, unique=True)
-    # country = relationship('CountryData', back_populates='regions')
 
 
 class Disease(Base):
@@ -30,7 +29,7 @@ class Disease(Base):
     disease = Column(String(100), nullable=False, unique=True)
     active = Column(SmallInteger, nullable=False, default=1)
     last_updated = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
-    # should be unique
+
     colour = Column(String(16))
     hindi_translation = Column(String(255), nullable=True)
 
@@ -150,7 +149,6 @@ class Source(Base):
     __table_args__ = (UniqueConstraint("id"), {"mysql_charset": "utf8mb4"})
 
 
-## ************* ARTICLE **********************
 class Article(Base):
     __tablename__ = "article"
     id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
@@ -174,4 +172,41 @@ class Article(Base):
     flag_comments = Column(String(900))
     original_priority_score = Column(Float, default=None)
     suggested_priority_score = Column(Float, default=None)
-    # language_detection_method = relationship('LanguageDetectionMethod', )
+
+
+class ArticleReviewdataPoint(Base):
+    __tablename__ = "article_reviewdata_point"
+
+    id = Column(Integer, autoincrement=True, unique=True, primary_key=True, nullable=False)
+    article_id = Column(Integer)
+    article_reviewdata_field_id = Column(Integer)
+    translation_status_id = Column(
+        Integer,
+        default=None,
+    )
+    value = Column(String, nullable=False)
+    value_with_nlp = Column(String, nullable=True, default=None)
+    value_original_language = Column(String, nullable=True, default=None)
+    extra = Column(String, nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "article_id",
+            "article_reviewdata_field_id",
+            name="uq_article_reviewdata_point",
+        ),
+    )
+
+
+class ArticleReviewdataPointNlp(Base):
+    __tablename__ = "article_reviewdata_point_nlp"
+
+    id = Column(Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
+    article_reviewdata_point_id = Column(
+        Integer,
+        default=None,
+    )
+    nlp_index = Column(Integer, nullable=False)
+    display_text = Column(String, nullable=False)
+    value = Column(String, nullable=False)
+    category = Column(String(10), nullable=False)

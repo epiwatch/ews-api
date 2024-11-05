@@ -41,7 +41,6 @@ def get_countries_endpoint(db: Database, lang: str | None):
     return country_results
 
 
-# ========== MAIN MAP ENDPOINT =============
 def map_endpoint(request, map_input: MapEndpointInput):
     start_date = map_input.start_date
     end_date = map_input.end_date
@@ -71,13 +70,13 @@ def map_endpoint(request, map_input: MapEndpointInput):
             country_object["iso3"] = res["iso3"]
             country_object["lat"] = res["lat"]
             country_object["long"] = res["long"]
-            ## ILLNESSES - GET illnessINCOUNTRY
+
             if ALL_DISEASES is False:
                 country_illnesses = reportIllnessInCountryORM(
                     db, start_date=start_date, end_date=end_date, country_id=countryid, diseases=disease_list, syndromes=syndrome_list, lang=lang
                 )
             else:
-                country_illnesses = reportIllnessInCountryORMAllDiseases(db, start_date=start_date, end_date=end_date, country_id=countryid, syndromes=syndrome_list,lang=lang)
+                country_illnesses = reportIllnessInCountryORMAllDiseases(db, start_date=start_date, end_date=end_date, country_id=countryid, syndromes=syndrome_list, lang=lang)
             processed_country_illness = process_orm_res(country_illnesses)
             illness_object = generate_illness_count(processed_country_illness)
             country_object["illness"] = illness_object
@@ -270,7 +269,6 @@ def get_country_report_endpoint(db, start_date, end_date, country_id, diseases, 
                 subq_locations.c.country,
                 subq_data_points.c.title,
                 subq_data_points.c.url,
-                # cast(subq_data_points.c.publication_date, Date).label('date')
             )
             .join(subq_data_points, models.Report.id == subq_data_points.c.report_id)
             .join(subq_diseases, models.Report.id == subq_diseases.c.report_id)
